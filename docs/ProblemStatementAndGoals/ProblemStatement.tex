@@ -3,9 +3,9 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 
-\title{Problem Statement and Goals\\\progname}
+\title{Problem Statement and Goals\\Equivariant Sensor Fusion}
 
-\author{\authname}
+\author{Alaap Grandhi}
 
 \date{}
 
@@ -22,72 +22,78 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+Jan. 21 & Alaap & Initial Commit\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}.} 
-
 \wss{You can change the section headings, as long as you include the required
 information.}
 
-\subsection{Problem}
+Over the past few years, we have seen more and more autonomous vehicles being allowed onto the road. 
+With this increase, the need for perception methods that can effectively use readings from sensor 
+modalities like Camera and LiDAR to inform these vehicles of their surroundings has similarly increased.
+
+\subsection{Problem} 
+While sensor modalities like LiDAR and Camera can capture meaningful information about road conditions,
+they are inherently prone to failure. LiDAR sensors can fail in scattering media like snow while cameras
+are easily occluded. Thus, learnt methods combining the readings from these modalities have become the 
+state-of-the-art for this task due to their ability to overcome individual sensor modality failures.
+Still, these techniques suffer from local misalignment between the features obtained for these modalities. 
+This motivates the need for new approaches that can robustly combine readings from these modalities.  
 
 \subsection{Inputs and Outputs}
-
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+For the purpose of this document, the process by which the given network/model is trained is out of scope. 
+Given this, the inputs in this problem would be a set of camera images taken from different poses (multi-view) alongside a 
+pointcloud obtained from a lidar sensor. Subsequently, the outputs would be a set of labelled bounding box predictions 
+corresponding to pedestrians and vehicles observed in the robot's surroundings. 
 
 \subsection{Stakeholders}
+\subsubsection{Academic Stakeholders}
+Academic stakeholders for this task would primarily include Computer Vision and Robot Path Planning researchers
+in the field of Autonomous Driving. With the sheer volume of research being conducted in this field using public datasets,
+this work would aim to be an easily integratable and easily adaptable approach to alignment-aware sensor fusion for autonomous
+driving. Thus, it could serve as a basis for future research in the field by academic institutions. 
+
+\subsubsection{Industrial Stakeholders}
+Industrial stakeholders for this task would primarily include companies like Waabi, Waymo and Tesla that produce
+autonomous vehicles. 
 
 \subsection{Environment}
+\subsubsection{Software}
+The software should be compatible with any up-to-date operating system.
 
-\wss{Hardware and software environment}
+\subsubsection{Hardware}
+Given that the solution space will revolve around learned methods, any computer possessing a machine-learning capable
+GPU with at least 8GB vram will be suitable for training and inference of models. However, this vram requirement would
+be significantly lower for inference-only settings using pre-trained models.
 
 \section{Goals}
-
+\begin{enumerate}
+    \item Given a set of camera images $\{C_i\}$ and a lidar pointcloud $P$ obtained from an autonomous vehicle at a 
+    given point in time, determine the set of bounding boxes for dynamic entities in its surroundings $\{B_i\}$ 
+    \item Given a common standard training dataset (i.e. Waymo, NuScenes, Kitti), the trained model should achieve comparable 
+    accuracy (mAP) to existing state-of-the-art methods
+    \item In the presence of disturbances in one of the two given modalities, the trained model should achieve comparable 
+    accuracy (mAP) to a network solely trained on and processing the undisturbed modality.
+\end{enumerate}
 \section{Stretch Goals}
-
+\begin{enumerate}
+    \item Given a set of disturbed camera images $\{C_{d,i}\}$ and a disturbed lidar pointcloud $P_d$, achieve 
+    better accuracy (mAP) than a network solely trained on either modality.
+    \item Produce a range of architectures that can each meet the aforementioned requirements and thus be chosen from based
+    on the specific dataset used. 
+\end{enumerate}
 \section{Challenge Level and Extras}
 
-\wss{State your expected challenge level (advanced, general or basic).  The
-challenge can come through the required domain knowledge, the implementation or
-something else.  Usually the greater the novelty of a project the greater its
-challenge level.  You should include your rationale for the selected level.
-Approval of the level will be part of the discussion with the instructor for
-approving the project.  The challenge level, with the approval (or request) of
-the instructor, can be modified over the course of the term.}
-
-\wss{Teams may wish to include extras as either potential bonus grades, or to
-make up for a less advanced challenge level.  Potential extras include usability
-testing, code walkthroughs, user documentation, formal proof, GenderMag
-personas, Design Thinking, etc.  Normally the maximum number of extras will be
-two.  Approval of the extras will be part of the discussion with the instructor
-for approving the project.  The extras, with the approval (or request) of the
-instructor, can be modified over the course of the term.}
+This project would be considered an advanced research project as it will include the development
+of newer state-of-the-art perception architectures (a task that typically can lead to published paper).
+Additionally, although beyond the scope of this document, the approaches considered will utilize group
+theoretic principles and Equivariant architectures to improve alignment between sensor modalities. This 
+would in turn introduce the need for custom layers (rather than just combining a set of off-the-shelf components).
 
 \newpage{}
-
-\section*{Appendix --- Reflection}
-
-\wss{Not required for CAS 741}
-
-\input{../Reflection.tex}
-
-\begin{enumerate}
-    \item What went well while writing this deliverable? 
-    \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-    \item How did you and your team adjust the scope of your goals to ensure
-    they are suitable for a Capstone project (not overly ambitious but also of
-    appropriate complexity for a senior design project)?
-\end{enumerate}  
 
 \end{document}
