@@ -3,6 +3,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{float}
 \hypersetup{
     colorlinks,
     citecolor=blue,
@@ -14,6 +15,8 @@
 
 \input{../Comments}
 \input{../Common}
+
+\newcommand{\ProjectName}{ESF }
 
 \begin{document}
 
@@ -30,8 +33,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+February 23 & 1.0 & Initial version of the VnV Plan\\
 \bottomrule
 \end{tabularx}
 
@@ -89,56 +91,47 @@ This document ... \wss{provide an introductory blurb and roadmap of the
 
 \subsection{Summary}
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+The \ProjectName{}project will involve constructing a library that enables users to both
+train and test multi-sensor 3D object detection networks on public autonomous driving datasets. 
+Expanding upon the capabilities of the OpenPCDet repository, it will serve as a foundation for 
+further research into the field by presenting a method for LiDAR-Camera fusion-based object 
+detection that better addresses alignment issues faced by prior methods. 
+
+The training and inference (testing) portions of \ProjectName{}correspond to two different use-cases 
+that require different considerations. During training, the library is intended to allow an experienced
+machine learning and perception engineer to train a LiDAR-Camera fusion network on an autonomous driving 
+dataset of their choosing. During inference, the library is intended to allow a user or a greater system 
+to predict the set of dynamic objects in an autonomous vehicle's surroundings using a trained model and 
+sensor input.
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+One of the two primary objectives is to build confidence in the correctness of the software.
+As a routinely used and validated open-source repository, the base functionality of the OpenPCDet
+repository is considered to be error-free and thus its correctness is outside the scope of this document/project.
+The installation of the software and the extensions made to it are the components for which correctness will be 
+verified. 
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
-worthwhile to justify why the objectives are left out.}
+Alongside correctness, verifying the accuracy of the solution relative to existing baselines implemented in 
+OpenPCDet is the second primary objective. Since the software is intended to serve as a foundation
+for future research, its relative accuracy compared to state-of-the-art baseline methods will serve 
+as a metric to judge how much it contributes to research in the field.
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
-has already been verified by its implementation team.}
-
-\subsection{Challenge Level and Extras}
-
-\wss{State the challenge level (advanced, general, basic) for your project.
-Your challenge level should exactly match what is included in your problem
-statement.  This should be the challenge level agreed on between you and the
-course instructor.  You can use a pull request to update your challenge level
-(in TeamComposition.csv or Repos.csv) if your plan changes as a result of the
-VnV planning exercise.}
-
-\wss{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.
-You can use a pull request to update your extras (in TeamComposition.csv or
-Repos.csv) if your plan changes as a result of the VnV planning exercise.}
+A secondary objective is ensuring the usability of the software. Since the library will be extended and
+used for research purposes, it is important to minimize the effort needed to understand and modify the code
+as needed. 
 
 \subsection{Relevant Documentation}
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.  You can create BibTeX entries for your
-  documents and within those entries include a hyperlink to the documents.}
+The other relevant design documents as well as their relations to this document are listed as follows:
 
-\citet{SRS}
-
-\wss{Don't just list the other documents.  You should explain why they are relevant and 
-how they relate to your VnV efforts.}
+\begin{itemize}
+  \item SRS (\citet{SRS}): Describes the problem the software solves, the software's goals, 
+  the relevant theoretical models, and the requirements for potential solutions. This document 
+  thereby establishes the setting and mathematical tools necessary for the validation and verification
+  methods described in this document.
+  \item More documents will be added as they are completed.
+\end{itemize}
 
 \section{Plan}
 
@@ -147,40 +140,64 @@ how they relate to your VnV efforts.}
 
 \subsection{Verification and Validation Team}
 
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|p{3cm}|p{3cm}|p{6cm}|}
+  \hline
+  \textbf{Name} & \textbf{Role} & \textbf{Description} \\ \hline
+  Alaap Grandhi & Author & Write the VnV plan, carry out the testing detailed in it, fill in the VnV report, and validate the software and documents against the requirements during development. \\ \hline
+  Spencer Smith & Project Supervisor/Course Instructor & Review and provide feedback on the VnV plan and report. Additionally, provide insight into better testing methods. \\ \hline
+  Matthew Giamou & Masters Supervisor & Provide advice on the project in general. \\ \hline
+  Bo Liang & Domain Expert Reviewer & Review and provide feedback on the VnV plan and report. \\ \hline 
+
+  \end{tabular}
+\end{table}
 
 \subsection{SRS Verification Plan}
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+The SRS will be reviewed in two stages. First, the Project Supervisor and the Domain
+Expert Reviewer will evaluate the document using the SRS checklist from lecture (cite here).
+Since they are familiar with the document structure, they will be able to provide feedback
+on how well the document adheres to the template and the required structure (in addition to 
+providing feedback on document content). 
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
-
-\wss{Maybe create an SRS checklist?}
+Following the creation of a series of github issues corresponding 
+to feedback on the document, the second stage of SRS reviewing will begin. At that point, a meeting 
+will be set up with my Masters supervisor to go over the scientific principles discussed in the SRS document 
+alongside the suggested changes and questions from the issues on github. Since he is familiar with 
+my research he can provide additional feedback on any technical inconsistencies or ambiguities in the document.
 
 \subsection{Design Verification Plan}
 
-\wss{Plans for design verification}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+To verify the design, I have constructed the following checklist detailing the aspects of the design
+that the Domain Expert Reviewer and optionally the Masters and Project Supervisors (if they have time) 
+will evaluate during regular discussions:
+\begin{itemize}
+  \item Does the design explicitly or implicitly address all requirements described in the SRS document?
+  \item Are the interfaces between modules of the design clear and in-line with the modular structure of the OpenPCDet repository?
+  \item Given the overall design description, can the Domain Expert Reviewer accurately roughly predict the downstream code structure?
+  \item Are any aspects of the design ambiguous?
+  \item Does the design leverage existing functionality from the OpenPCDet repository where applicable?
+  \item Do all of the design components contribute towards meeting a requirement?
+  \begin{itemize}
+    \item If not, is this due to a redundancy in the design or something missing in the SRS document?
+  \end{itemize}
+\end{itemize}
 
 \subsection{Verification and Validation Plan Verification Plan}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
+The VnV plan will be verified in two parts corresponding to the two different 
+types of tests it contains. 
 
-\wss{The review will include reviews by your classmates}
+Where possible, tests governed by automated test suites
+like pytest will be tested using mutation testing to ensure that these tests sufficiently
+cover coding mistakes that are expected to happen. The specific `mutations' to be inserted
+into the code will be decided after the implementation is done. 
 
-\wss{Create a checklists?}
+Manual tests and the overall structure of the VnV plan will be reviewed by the Project Supervisor
+and the Domain Expert Reviewer. This will be done to both ensure that the document adheres to the
+template and to ensure that the tests presented sufficiently cover the requirements described in
+the SRS document.
 
 \subsection{Implementation Verification Plan}
 
@@ -197,22 +214,22 @@ CAS741) for a partial usability survey.}
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
-
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+There are a few different automated tools that will be used for testing.
+Since the library will be written in Python (the OpenPCDet library
+is written in Python), PyFlakes will be used as an error linter to discover
+simple logical errors. Linters like flake8 that enforce style convention will
+not be used as the base OpenPCDet repository does not adhere to any particular
+style convention (it is designed with research and quick development as the primary
+objective) and it would be out of scope to refactor that. Additionally, the automated
+unit tests below will be implemented in pytest and will be set to automatically run
+on push using github actions. Code coverage will not be considered for this project
+since by nature different components are meant to be called according to the training
+configuration passed in and it would overly tedious to routinely test over all possible
+input configurations.
 
 \subsection{Software Validation Plan}
+
+
 
 \wss{If there is any external data that can be used for validation, you should
   point to it here.  If there are no plans for validation, you should state that
@@ -500,30 +517,5 @@ Their values are defined in this section for easy maintenance.
 \subsection{Usability Survey Questions?}
 
 \wss{This is a section that would be appropriate for some projects.}
-
-\newpage{}
-\section*{Appendix --- Reflection}
-
-\wss{This section is not required for CAS 741}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.
-
-\input{../Reflection.tex}
-
-\begin{enumerate}
-  \item What went well while writing this deliverable? 
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item What knowledge and skills will the team collectively need to acquire to
-  successfully complete the verification and validation of your project?
-  Examples of possible knowledge and skills include dynamic testing knowledge,
-  static testing knowledge, specific tool usage, Valgrind etc.  You should look to
-  identify at least one item for each team member.
-  \item For each of the knowledge areas and skills identified in the previous
-  question, what are at least two approaches to acquiring the knowledge or
-  mastering the skill?  Of the identified approaches, which will each team
-  member pursue, and why did they make this choice?
-\end{enumerate}
 
 \end{document}
