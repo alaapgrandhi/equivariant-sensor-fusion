@@ -20,8 +20,8 @@
 
 \begin{document}
 
-\title{System Verification and Validation Plan for \progname{}} 
-\author{\authname}
+\title{System Verification and Validation Plan for \ProjectName{}} 
+\author{Alaap Grandhi}
 \date{\today}
 	
 \maketitle
@@ -37,56 +37,15 @@ February 23 & 1.0 & Initial version of the VnV Plan\\
 \bottomrule
 \end{tabularx}
 
-~\\
-\wss{The intention of the VnV plan is to increase confidence in the software.
-However, this does not mean listing every verification and validation technique
-that has ever been devised.  The VnV plan should also be a \textbf{feasible}
-plan. Execution of the plan should be possible with the time and team available.
-If the full plan cannot be completed during the time available, it can either be
-modified to ``fake it'', or a better solution is to add a section describing
-what work has been completed and what work is still planned for the future.}
-
-\wss{The VnV plan is typically started after the requirements stage, but before
-the design stage.  This means that the sections related to unit testing cannot
-initially be completed.  The sections will be filled in after the design stage
-is complete.  the final version of the VnV plan should have all sections filled
-in.}
-
 \newpage
 
 \tableofcontents
-
-\listoftables
-\wss{Remove this section if it isn't needed}
-
-\listoffigures
-\wss{Remove this section if it isn't needed}
-
-\newpage
-
-\section{Symbols, Abbreviations, and Acronyms}
-
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  T & Test\\
-  \bottomrule
-\end{tabular}\\
-
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
-\wss{Remove this section if it isn't needed}
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
-
+This document will 
 \section{General Information}
 
 \subsection{Summary}
@@ -135,8 +94,10 @@ The other relevant design documents as well as their relations to this document 
 
 \section{Plan}
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+This section describes the approaches that will be taken to verify and validate the different documents
+and steps involved in the design process. Namely, it will state the members of the VnV team and will describe
+the steps that will be taken to verify the SRS, design, VnV plan, implementation. It will also describe the automating
+testing tools that will be used.
 
 \subsection{Verification and Validation Team}
 
@@ -201,16 +162,9 @@ the SRS document.
 
 \subsection{Implementation Verification Plan}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
-
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
-
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+The implementation will simply be verified through semi-regular code walkthroughs with my Domain Expert.
+Additionally, the tests described in Section (insert section) will serve as a basis for verifying that the 
+implementation meets the requirements detailed in the SRS document.
 
 \subsection{Automated Testing and Verification Tools}
 
@@ -229,145 +183,216 @@ input configurations.
 
 \subsection{Software Validation Plan}
 
-
-
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
-
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
-
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
-
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
-
-\wss{This section might reference back to the SRS verification section.}
+Since requirement (insert requirement) specifically involves comparing the accuracy of the solution
+to a baseline on a publicly available dataset, validation is already implicitly conducted for the library.
+Considering that prior works in the field typically use mAP as a measure of solution quality, further validation
+is out of scope for this project due to the limited timeline. Validation of the requirements themselves will only 
+briefly be covered during discussions with my Masters Supervisor.
 
 \section{System Tests}
 
-\wss{There should be text between all headings, even if it is just a roadmap of
-the contents of the subsections.}
+This section details a set of tests that shall be sufficient to ensure that the proposed solution meets the requirements detailed in the SRS document.
+Additional tests may be added as the SRS document is refined.
 
 \subsection{Tests for Functional Requirements}
+The subsections below detail the tests that will be used to ensure that the solution meets the functional requirements.
 
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
+\subsubsection{Input Format Testing}
 
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
-
-\subsubsection{Area of Testing1}
-
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
+These tests will ensure that in inference, the system is able to process all the necessary
+file formats for the camera images and LiDAR pointclouds.
 		
-\paragraph{Title for Test}
+\paragraph{Camera Image Input Testing}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{test-camera-valid1$\rightarrow$4\\}
 
-Control: Manual versus Automatic
+Control: Automatic
 					
-Initial State: 
+Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming LiDAR pointcloud in the TFRecord format
+is also expected to have already been loaded.
 					
-Input: 
+Input: A valid (subject to input constraints) multiview camera image set stored in one of the file formats specified in requirement (insert requirement) (one test case for each).
 					
-Output: \wss{The expected result for the given inputs.  Output is not how you
-are going to return the results of the test.  The output is the expected
-result.}
+Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: For all the file formats specified in requirement (insert requirement), the inference pipeline should run without issues. All other aspects are kept
+constant between the tests to ensure that the test can detect any issues with specific image file formats.
 					
-How test will be performed: 
+How test will be performed: This test will be automatically run through pytest. The configuration, pretrained model, LiDAR pointcloud will all be manually generated beforehand
+and then automatically accessed by pytest. The same set of valid multiview camera images will simply be converted to the different file types beforehand to be automatically accessed
+by pytest on github push.
 					
-\item{test-id2\\}
+\item{test-camera-invalid\\}
 
-Control: Manual versus Automatic
+Control: Automatic
 					
-Initial State: 
+Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming LiDAR pointcloud in the TFRecord format
+is also expected to have already been loaded.
 					
-Input: 
+Input: A valid (subject to input constraints) multiview camera image set stored in a file format that is not expected to be handled by the program (a binary image).
 					
-Output: \wss{The expected result for the given inputs}
+Output: A invalid-input error is expected to be thrown by the program.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: The inference pipeline should not even try to run for any file format not specified in requirement (insert requirement). This is to test for cases
+where images are input in unforeseen or invalid formats, and makes sure that the system's response to such input types is well-defined. 
 
-How test will be performed: 
+How test will be performed: This test will be automatically run through pytest on github push in much the same way as the valid tests. The only difference is that it will
+load a set of multiview camera images stored in a binary format.
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\paragraph{LiDAR Pointcloud Input Testing}
 
-...
+\begin{enumerate}
+
+\item{test-lidar-valid1$\rightarrow$4\\}
+
+Control: Automatic
+					
+Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming set of multiview camera images in the PNG format
+is also expected to have already been loaded.
+					
+Input: A valid (subject to input constraints) LiDAR pointcloud stored in one of the file formats specified in requirement (insert requirement) (one test case for each).
+					
+Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes.
+
+Test Case Derivation: For all the file formats specified in requirement (insert requirement), the inference pipeline should run without issues. All other aspects are kept
+constant between the tests to ensure that the test can detect any issues with specific image file formats.
+					
+How test will be performed: This test will be automatically run through pytest. The configuration, pretrained model, multiview camera image set will all be manually generated beforehand
+and then automatically accessed by pytest. The same LiDAR pointcloud will simply be converted to the different file types beforehand to be automatically accessed
+by pytest on github push.
+					
+\item{test-lidar-invalid\\}
+
+Control: Automatic
+					
+Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming set of multiview camera images in the PNG format
+is also expected to have already been loaded.
+					
+Input: A valid (subject to input constraints) LiDAR pointcloud stored in the file format specified in table x for the given test case.
+					
+Output: A invalid-input error is expected to be thrown by the program.
+
+Test Case Derivation: The inference pipeline should not even try to run for any file format not specified in requirement (insert requirement). This is to test for cases
+where pointclouds are input in unforeseen or invalid formats, and makes sure that the system's response to such input types is well-defined. 
+
+How test will be performed: This test will be automatically run through pytest on github push in much the same way as the valid tests. The only difference is that it will
+load a LiDAR pointcloud stored in a binary format.
+
+\end{enumerate}
+
+\subsubsection{Tests for Correct Optimization}
+
+The test below will ensure that the proposed solution is being optimized correctly.
+
+\paragraph{Model Training Consistency Testing}
+\begin{enumerate}
+
+  \item{test-consistent\\}
+  
+  Control: Manual
+            
+  Initial State: A set of pre-configured baseline methods will be set up for training. Additionally, the proposed method built on the OpenPCDet platform
+  will be set up for training.
+            
+  Input: A sufficiently small training dataset that has been predetermined to produce similar training accuracies across the baseline methods 
+  (corresponding to an mAP standard deviation below a threshold that will be decided on with my Domain Expert).
+            
+  Output: When all the models are trained and subsequently evaluated on the same small training dataset, the proposed method shall not fall below the mean mAP of
+  the baseline methods by more than a given absolute threshold that will be decided on with my Domain Expert.
+  
+  Test Case Derivation: There is no true way to test if the combined bounding box is exactly minimized considering the randomness inherent in machine learning techniques
+  and floating point computation. Rather, since the baselines are assumed to roughly minimize the bounding box loss on the training dataset, consistency with their results 
+  should be sufficient for verifying this. Additionally, by evaluating on the same dataset that was trained on, we can ensure that the ADAM optimization is minimizing the loss
+  for the training subset.
+            
+  How test will be performed: This test will be manually run due to the time-intensive nature of model training. Moreover, it will not be regularly run but rather only run when 
+  major changes to the proposed solution are made. It will also not be run until the solution is in a trainable state as a whole and the other tests have all passed.
+\end{enumerate}
+
+Note that since ADAM will be directly imported from pytorch's implementation, its validity will not be verified. Rather, the code walkthroughs mentioned above in section (insert section)
+will aid in verifying that it has been used correctly.
+
+\subsubsection{Tests for Visualization}
+
+The below test will verify that the visualization produced during the inference phase is correct.
+
+\paragraph{Visualization Testing}
+\begin{enumerate}
+
+  \item{test-viz-correct\\}
+  
+  Control: Automatic
+            
+  Initial State: Any components aside from the inputs that are needed for the visualization pipeline to run.
+            
+  Input: A set of pre-configured bounding boxes will be loaded alongside a predetermine LiDAR pointcloud. Additionally, a set of viewing positions and resolutions
+  to view the produced pointclouds from.
+
+  Output: The output pointcloud visualizations with bounding boxes should look identical to pre-generated verified visualizations of the same scene and bounding boxes. These
+  pre-generated visualizations will be created in the future and carefully examined to ensure correctness before setting up the test.
+  
+  Test Case Derivation: This is really just using the method of manufactured solutions to verify that the visualization pipeline is working as expected without bugs. A correct
+  and matching visualization here does not guarantee a correctly functioning visualization pipeline but it is a necessary condition.
+            
+  How test will be performed: This test will automatically be run through pytest with the LiDAR pointcloud, bounding boxes, and verified visualizations being generated beforehand.
+  Matplotlib.testing.compare.compare\_images will be run to compare each generated visualization with the corresponding verified visualization.
+\end{enumerate}
 
 \subsection{Tests for Nonfunctional Requirements}
+The subsections below will detail the tests that will ensure that the proposed solution meets the nonfunctional requirements.
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy.}
+\subsubsection{Tests for Accuracy}
 
-\wss{For some nonfunctional tests, you won't be setting a target threshold for
-passing the test, but rather describing the experiment you will do to measure
-the quality for different inputs.  For instance, you could measure speed versus
-the problem size.  The output of the test isn't pass/fail, but rather a summary
-table or graph.}
-
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
-
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
-
-\wss{If you introduce static tests in your plan, you need to provide details.
-How will they be done?  In cases like code (or document) walkthroughs, who will
-be involved? Be specific.}
-
-\subsubsection{Area of Testing1}
+The test below will ensure that the proposed solution is at least relatively as accurate as the BEVFusion baseline.
 		
 \paragraph{Title for Test}
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{test-mAP\\}
 
-Type: Functional, Dynamic, Manual, Static etc.
+Type: Manual
 					
-Initial State: 
+Initial State: The BEVFusion model will be loaded with the BEVFusion configuration currently present in the OpenPCDet repository.
+Additionally, the proposed solution will be loaded with some chosen configuration.
 					
-Input/Condition: 
+Input/Condition: A training and validation set from the nuScenes dataset.
 					
-Output/Result: 
+Output/Result: After both models have been trained on the nuScenes training set, their mAP metrics on the validation set will be returned. The
+proposed solution's validation mAP should not fall below the BEVFusion mAP by more than a threshold that will be determined with my Domain Expert.
 					
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+How test will be performed: Since model training is time-intensive, this test will mainly be conducted whenever major changes to the proposed solution are made.
+The threshold will only serve as a guideline and after each run of this test, a discussion will be done with my Domain Expert and Masters Supervisor to determine
+if the result is satisfactory.
 
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+While Waymo could be tested for as well, it is a much larger dataset that would take quite long to train on. Moreover, evaluating this test for the nuScenes dataset
+alone should provide almost as much insight as evaluating on both (since in existing research, better performing models tend to do better across both datasets).
 
-...
+\subsubsection{Tests for Understandability}
+
+Rather than use a fixed test for understandability, it will be tested closer to the end of the project through code walkthroughs. Specifically,
+I will provide a demonstration of how to use the library to my Domain Expert and optionally Project and Masters supervisors (if they have time).
+I will ask them the following questions afterwords to gauge how easy to understand the code is.
+\begin{enumerate}
+  \item How do you think the code works at a high level?
+  \item If you had to describe what $x$ (to be determined after implementation) class of submodules does, how would you do so?
+  \item If you had to learn how to use this code with nothing but the documentation present in the repository and the code itself, how long do you think it would take you to do so?
+\end{enumerate}
+
+Afterwords, I will test further test their understanding of the code by letting them play around with it and getting them to perform the following tasks with assistance as necessary.
+\begin{enumerate}
+  \item Train a model using $x$ (to be determined after implementation) configuration.
+  \item Evaluate $x$ (to be determined after implementation) pretrained model on the nuScenes validation dataset.
+  \item Modify the configuration of $x$ (to be determined after implementation) model to have $x$ (to be determined after implementation) effect.
+\end{enumerate}
+
+Through the code walkthrough and their subsequent interaction with it, I hope to get at least a rough idea of how understandable the code is.
 
 \subsection{Traceability Between Test Cases and Requirements}
 
