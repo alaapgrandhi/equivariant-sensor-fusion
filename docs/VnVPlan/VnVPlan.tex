@@ -33,7 +33,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-February 23 & 1.0 & Initial version of the VnV Plan\\
+February 27 & 1.0 & Initial version of the VnV Plan\\
 \bottomrule
 \end{tabularx}
 
@@ -41,18 +41,22 @@ February 23 & 1.0 & Initial version of the VnV Plan\\
 
 \tableofcontents
 
+\listoftables
+
 \newpage
 
 \pagenumbering{arabic}
 
-This document will 
+This document will describe the Verification and Validation (VnV) plan for the \ProjectName{}project. It will
+outline the tests and procedures that will be taken to ensure the integrity of the code as well as to ensure that
+implementation meets the requirements described in the Software Requirements and Specifications (SRS) document (\cite{SRS}).
 \section{General Information}
-
+This section provides general information about the \ProjectName{}project.
 \subsection{Summary}
 
 The \ProjectName{}project will involve constructing a library that enables users to both
 train and test multi-sensor 3D object detection networks on public autonomous driving datasets. 
-Expanding upon the capabilities of the OpenPCDet repository, it will serve as a foundation for 
+Expanding upon the capabilities of the OpenPCDet repository (\cite{openpcdet2020}), it will serve as a foundation for 
 further research into the field by presenting a method for LiDAR-Camera fusion-based object 
 detection that better addresses alignment issues faced by prior methods. 
 
@@ -67,12 +71,12 @@ sensor input.
 
 One of the two primary objectives is to build confidence in the correctness of the software.
 As a routinely used and validated open-source repository, the base functionality of the OpenPCDet
-repository is considered to be error-free and thus its correctness is outside the scope of this document/project.
+repository (\cite{openpcdet2020}) is considered to be error-free and thus its correctness is outside the scope of this document/project.
 The installation of the software and the extensions made to it are the components for which correctness will be 
 verified. 
 
-Alongside correctness, verifying the accuracy of the solution relative to existing baselines implemented in 
-OpenPCDet is the second primary objective. Since the software is intended to serve as a foundation
+Alongside correctness, verifying the accuracy of \ProjectName{}relative to existing baselines implemented in 
+OpenPCDet (\cite{openpcdet2020}) is the second primary objective. Since the software is intended to serve as a foundation
 for future research, its relative accuracy compared to state-of-the-art baseline methods will serve 
 as a metric to judge how much it contributes to research in the field.
 
@@ -85,7 +89,7 @@ as needed.
 The other relevant design documents as well as their relations to this document are listed as follows:
 
 \begin{itemize}
-  \item SRS (\citet{SRS}): Describes the problem the software solves, the software's goals, 
+  \item SRS (\cite{SRS}): Describes the problem the software solves, the software's goals, 
   the relevant theoretical models, and the requirements for potential solutions. This document 
   thereby establishes the setting and mathematical tools necessary for the validation and verification
   methods described in this document.
@@ -96,7 +100,7 @@ The other relevant design documents as well as their relations to this document 
 
 This section describes the approaches that will be taken to verify and validate the different documents
 and steps involved in the design process. Namely, it will state the members of the VnV team and will describe
-the steps that will be taken to verify the SRS, design, VnV plan, implementation. It will also describe the automating
+the steps that will be taken to verify the SRS (\cite{SRS}), design, VnV plan, implementation. It will also describe the automating
 testing tools that will be used.
 
 \subsection{Verification and Validation Team}
@@ -110,8 +114,9 @@ testing tools that will be used.
   Spencer Smith & Project Supervisor/Course Instructor & Review and provide feedback on the VnV plan and report. Additionally, provide insight into better testing methods. \\ \hline
   Matthew Giamou & Masters Supervisor & Provide advice on the project in general. \\ \hline
   Bo Liang & Domain Expert Reviewer & Review and provide feedback on the VnV plan and report. \\ \hline 
-
   \end{tabular}
+  \caption{VnV team members and their responsibilities}
+  \label{Table:VnV_Team}
 \end{table}
 
 \subsection{SRS Verification Plan}
@@ -134,14 +139,14 @@ To verify the design, I have constructed the following checklist detailing the a
 that the Domain Expert Reviewer and optionally the Masters and Project Supervisors (if they have time) 
 will evaluate during regular discussions:
 \begin{itemize}
-  \item Does the design explicitly or implicitly address all requirements described in the SRS document?
-  \item Are the interfaces between modules of the design clear and in-line with the modular structure of the OpenPCDet repository?
+  \item Does the design explicitly or implicitly address all requirements described in the SRS document? (\cite{SRS})
+  \item Are the interfaces between modules of the design clear and in-line with the modular structure of the OpenPCDet repository? (\cite{openpcdet2020})
   \item Given the overall design description, can the Domain Expert Reviewer accurately roughly predict the downstream code structure?
   \item Are any aspects of the design ambiguous?
-  \item Does the design leverage existing functionality from the OpenPCDet repository where applicable?
+  \item Does the design leverage existing functionality from the OpenPCDet repository (\cite{openpcdet2020}) where applicable?
   \item Do all of the design components contribute towards meeting a requirement?
   \begin{itemize}
-    \item If not, is this due to a redundancy in the design or something missing in the SRS document?
+    \item If not, is this due to a redundancy in the design or something missing in the SRS document? (\cite{SRS})
   \end{itemize}
 \end{itemize}
 
@@ -158,21 +163,21 @@ into the code will be decided after the implementation is done.
 Manual tests and the overall structure of the VnV plan will be reviewed by the Project Supervisor
 and the Domain Expert Reviewer. This will be done to both ensure that the document adheres to the
 template and to ensure that the tests presented sufficiently cover the requirements described in
-the SRS document.
+the SRS document (\cite{SRS}).
 
-\subsection{Implementation Verification Plan}
+\subsection{Implementation Verification Plan} \label{imple_ver}
 
 The implementation will simply be verified through semi-regular code walkthroughs with my Domain Expert.
-Additionally, the tests described in Section (insert section) will serve as a basis for verifying that the 
-implementation meets the requirements detailed in the SRS document.
+Additionally, the tests described in Section \ref{System_Tests} will serve as a basis for verifying that the 
+implementation meets the requirements detailed in the SRS document. (\cite{SRS})
 
 \subsection{Automated Testing and Verification Tools}
 
 There are a few different automated tools that will be used for testing.
-Since the library will be written in Python (the OpenPCDet library
+Since the library will be written in Python (the OpenPCDet library (\cite{openpcdet2020})
 is written in Python), PyFlakes will be used as an error linter to discover
 simple logical errors. Linters like flake8 that enforce style convention will
-not be used as the base OpenPCDet repository does not adhere to any particular
+not be used as the base OpenPCDet repository (\cite{openpcdet2020}) does not adhere to any particular
 style convention (it is designed with research and quick development as the primary
 objective) and it would be out of scope to refactor that. Additionally, the automated
 unit tests below will be implemented in pytest and will be set to automatically run
@@ -183,19 +188,19 @@ input configurations.
 
 \subsection{Software Validation Plan}
 
-Since requirement (insert requirement) specifically involves comparing the accuracy of the solution
+Since requirement NFR1 specifically involves comparing the accuracy of the solution
 to a baseline on a publicly available dataset, validation is already implicitly conducted for the library.
 Considering that prior works in the field typically use mAP as a measure of solution quality, further validation
 is out of scope for this project due to the limited timeline. Validation of the requirements themselves will only 
 briefly be covered during discussions with my Masters Supervisor.
 
-\section{System Tests}
+\section{System Tests} \label{System_Tests}
 
-This section details a set of tests that shall be sufficient to ensure that the proposed solution meets the requirements detailed in the SRS document.
+This section details a set of tests that shall be sufficient to ensure that \ProjectName{}meets the requirements detailed in the SRS document.
 Additional tests may be added as the SRS document is refined.
 
 \subsection{Tests for Functional Requirements}
-The subsections below detail the tests that will be used to ensure that the solution meets the functional requirements.
+The subsections below detail the tests that will be used to ensure that \ProjectName{}meets the functional requirements.
 
 \subsubsection{Input Format Testing}
 
@@ -213,11 +218,11 @@ Control: Automatic
 Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming LiDAR pointcloud in the TFRecord format
 is also expected to have already been loaded.
 					
-Input: A valid (subject to input constraints) multiview camera image set stored in one of the file formats specified in requirement (insert requirement) (one test case for each).
+Input: A valid (subject to input constraints) multiview camera image set stored in one of the file formats specified in requirement R1 (one test case for each).
 					
 Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes.
 
-Test Case Derivation: For all the file formats specified in requirement (insert requirement), the inference pipeline should run without issues. All other aspects are kept
+Test Case Derivation: For all the file formats specified in requirement R1, the inference pipeline should run without issues. All other aspects are kept
 constant between the tests to ensure that the test can detect any issues with specific image file formats.
 					
 How test will be performed: This test will be automatically run through pytest. The configuration, pretrained model, LiDAR pointcloud will all be manually generated beforehand
@@ -235,7 +240,7 @@ Input: A valid (subject to input constraints) multiview camera image set stored 
 					
 Output: A invalid-input error is expected to be thrown by the program.
 
-Test Case Derivation: The inference pipeline should not even try to run for any file format not specified in requirement (insert requirement). This is to test for cases
+Test Case Derivation: The inference pipeline should not even try to run for any file format not specified in requirement R1. This is to test for cases
 where images are input in unforeseen or invalid formats, and makes sure that the system's response to such input types is well-defined. 
 
 How test will be performed: This test will be automatically run through pytest on github push in much the same way as the valid tests. The only difference is that it will
@@ -254,11 +259,11 @@ Control: Automatic
 Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming set of multiview camera images in the PNG format
 is also expected to have already been loaded.
 					
-Input: A valid (subject to input constraints) LiDAR pointcloud stored in one of the file formats specified in requirement (insert requirement) (one test case for each).
+Input: A valid (subject to input constraints) LiDAR pointcloud stored in one of the file formats specified in requirement R2 (one test case for each).
 					
 Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes.
 
-Test Case Derivation: For all the file formats specified in requirement (insert requirement), the inference pipeline should run without issues. All other aspects are kept
+Test Case Derivation: For all the file formats specified in requirement R2, the inference pipeline should run without issues. All other aspects are kept
 constant between the tests to ensure that the test can detect any issues with specific image file formats.
 					
 How test will be performed: This test will be automatically run through pytest. The configuration, pretrained model, multiview camera image set will all be manually generated beforehand
@@ -276,7 +281,7 @@ Input: A valid (subject to input constraints) LiDAR pointcloud stored in the fil
 					
 Output: A invalid-input error is expected to be thrown by the program.
 
-Test Case Derivation: The inference pipeline should not even try to run for any file format not specified in requirement (insert requirement). This is to test for cases
+Test Case Derivation: The inference pipeline should not even try to run for any file format not specified in requirement R2. This is to test for cases
 where pointclouds are input in unforeseen or invalid formats, and makes sure that the system's response to such input types is well-defined. 
 
 How test will be performed: This test will be automatically run through pytest on github push in much the same way as the valid tests. The only difference is that it will
@@ -286,7 +291,7 @@ load a LiDAR pointcloud stored in a binary format.
 
 \subsubsection{Tests for Correct Optimization}
 
-The test below will ensure that the proposed solution is being optimized correctly.
+The test below will ensure that \ProjectName{}is being optimized correctly.
 
 \paragraph{Model Training Consistency Testing}
 \begin{enumerate}
@@ -295,7 +300,7 @@ The test below will ensure that the proposed solution is being optimized correct
   
   Control: Manual
             
-  Initial State: A set of pre-configured baseline methods will be set up for training. Additionally, the proposed method built on the OpenPCDet platform
+  Initial State: A set of pre-configured baseline methods will be set up for training. Additionally, the proposed method built on the OpenPCDet (\cite{openpcdet2020}) platform
   will be set up for training.
             
   Input: A sufficiently small training dataset that has been predetermined to produce similar training accuracies across the baseline methods 
@@ -310,10 +315,10 @@ The test below will ensure that the proposed solution is being optimized correct
   for the training subset.
             
   How test will be performed: This test will be manually run due to the time-intensive nature of model training. Moreover, it will not be regularly run but rather only run when 
-  major changes to the proposed solution are made. It will also not be run until the solution is in a trainable state as a whole and the other tests have all passed.
+  major changes to \ProjectName{} are made. It will also not be run until the model is in a trainable state as a whole and the other tests have all passed.
 \end{enumerate}
 
-Note that since ADAM will be directly imported from pytorch's implementation, its validity will not be verified. Rather, the code walkthroughs mentioned above in section (insert section)
+Note that since ADAM will be directly imported from pytorch's implementation, its validity will not be verified. Rather, the code walkthroughs mentioned above in section \ref{imple_ver}
 will aid in verifying that it has been used correctly.
 
 \subsubsection{Tests for Visualization}
@@ -343,13 +348,13 @@ The below test will verify that the visualization produced during the inference 
 \end{enumerate}
 
 \subsection{Tests for Nonfunctional Requirements}
-The subsections below will detail the tests that will ensure that the proposed solution meets the nonfunctional requirements.
+The subsections below will detail the tests that will ensure that \ProjectName{}meets the nonfunctional requirements.
 
 \subsubsection{Tests for Accuracy}
 
-The test below will ensure that the proposed solution is at least relatively as accurate as the BEVFusion baseline.
+The test below will ensure that \ProjectName{}is at least relatively as accurate as the BEVFusion baseline (\cite{liang2022bevfusion}).
 		
-\paragraph{Title for Test}
+\paragraph{Accuracy Testing}
 
 \begin{enumerate}
 
@@ -357,24 +362,26 @@ The test below will ensure that the proposed solution is at least relatively as 
 
 Type: Manual
 					
-Initial State: The BEVFusion model will be loaded with the BEVFusion configuration currently present in the OpenPCDet repository.
-Additionally, the proposed solution will be loaded with some chosen configuration.
+Initial State: The BEVFusion model will be loaded with the BEVFusion configuration currently present in the OpenPCDet repository (\cite{openpcdet2020}).
+Additionally, \ProjectName{}will be loaded with some chosen configuration.
 					
-Input/Condition: A training and validation set from the nuScenes dataset.
+Input/Condition: A training and validation set from the nuScenes dataset (\cite{caesar2020nuscenes}).
 					
-Output/Result: After both models have been trained on the nuScenes training set, their mAP metrics on the validation set will be returned. The
+Output/Result: After both models have been trained on the nuScenes training set (\cite{caesar2020nuscenes}), their mAP metrics on the validation set will be returned. The
 proposed solution's validation mAP should not fall below the BEVFusion mAP by more than a threshold that will be determined with my Domain Expert.
 					
-How test will be performed: Since model training is time-intensive, this test will mainly be conducted whenever major changes to the proposed solution are made.
+How test will be performed: Since model training is time-intensive, this test will mainly be conducted whenever major changes to \ProjectName{}are made.
 The threshold will only serve as a guideline and after each run of this test, a discussion will be done with my Domain Expert and Masters Supervisor to determine
 if the result is satisfactory.
 
 \end{enumerate}
 
-While Waymo could be tested for as well, it is a much larger dataset that would take quite long to train on. Moreover, evaluating this test for the nuScenes dataset
+While Waymo (\cite{sun2020scalability})could be tested for as well, it is a much larger dataset that would take quite long to train on. Moreover, evaluating this test for the nuScenes dataset (\cite{caesar2020nuscenes})
 alone should provide almost as much insight as evaluating on both (since in existing research, better performing models tend to do better across both datasets).
 
 \subsubsection{Tests for Understandability}
+
+\paragraph{Understandability Testing}
 
 Rather than use a fixed test for understandability, it will be tested closer to the end of the project through code walkthroughs. Specifically,
 I will provide a demonstration of how to use the library to my Domain Expert and optionally Project and Masters supervisors (if they have time).
@@ -388,7 +395,7 @@ I will ask them the following questions afterwords to gauge how easy to understa
 Afterwords, I will test further test their understanding of the code by letting them play around with it and getting them to perform the following tasks with assistance as necessary.
 \begin{enumerate}
   \item Train a model using $x$ (to be determined after implementation) configuration.
-  \item Evaluate $x$ (to be determined after implementation) pretrained model on the nuScenes validation dataset.
+  \item Evaluate $x$ (to be determined after implementation) pretrained model on the nuScenes validation dataset (\cite{caesar2020nuscenes}).
   \item Modify the configuration of $x$ (to be determined after implementation) model to have $x$ (to be determined after implementation) effect.
 \end{enumerate}
 
@@ -396,8 +403,23 @@ Through the code walkthrough and their subsequent interaction with it, I hope to
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|}
+  \hline
+    & R1 & R2 & R3 & R4 & NFR1 & NFR2 \\
+  \hline
+  Camera Image Input Testing             &X& & & & & \\ \hline
+  LiDAR Pointcloud Input Testing         & &X& & & & \\ \hline
+  Model Training Consistency Testing     & & &X& & & \\ \hline
+  Visualization Testing                  & & & &X& & \\ \hline
+  Accuracy Testing                       & & & & &X& \\ \hline
+  Understandability Testing              & & & & & &X\\ \hline
+  \hline
+  \end{tabular}
+  \caption{Traceability Matrix Showing the Connections Between Requirements and Tests}
+  \label{Table:R_trace}
+  \end{table}
 
 \section{Unit Test Description}
 
