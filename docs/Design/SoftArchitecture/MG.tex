@@ -15,6 +15,8 @@
     linkcolor=red,
     urlcolor=blue
 }
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
 
 \input{../../Comments}
 \input{../../Common}
@@ -30,6 +32,8 @@
 \newcounter{mnum}
 \newcommand{\mthemnum}{M\themnum}
 \newcommand{\mref}[1]{M\ref{#1}}
+
+\tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
 
 \begin{document}
 
@@ -206,19 +210,23 @@ actually be implemented.
 {Hardware-Hiding Module} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\
-& ?\\ 
-& ?\\
+\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} 
+& Config Loading Module\\
+& Data Loading Module\\
+& Model Module\\
+& Checkpointing Module\\
+& Training Module\\
+& Inference Module\\
+& Loss Module\\ 
+& Evaluation Module\\
+& Optimization Module\\
+& Data Processing Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & {?}\\
-& ?\\
-& ?\\
+\multirow{3}{0.3\textwidth}{Software Decision Module}
+& Plotting Module\\
+& PyTorch Module\\
+& Logging Module\\
 \bottomrule
 
 \end{tabular}
@@ -382,6 +390,44 @@ relation is transitive, there is a use relation without an import, but the
 arrows in the diagram typically correspond to the presence of import statement.}
 
 \wss{If module A uses module B, the arrow is directed from A to B.}
+
+\newpage
+\begin{tikzpicture}[node distance=3cm]
+  \node (training) [process] {Training};
+  \node (inference) [process, right of=training] {Inference};
+  \node (eval) [process, right of=inference] {Evaluation};
+  \node (loss) [process, below of=training] {Loss};
+  \node (optim) [process, right of=loss, xshift=-0.5cm] {Optimizer};
+  \node (plot) [process, right of=optim, xshift=-0.5cm] {Plotting};
+  \node (ckpt) [process, right of=plot] {Checkpoint};
+  \node (dataload) [process, right of=ckpt] {Data Loading};
+  \node (model) [process, left of=loss] {Model};
+  \node (dataproc) [process, below of=dataload] {Data Processing};
+  \node (configload) [process, below of=model, xshift=-1cm] {Config Loading};
+  \node (torch) [process, right of=configload, xshift=2cm] {PyTorch};
+  
+  \draw [->] (training) edge (loss);
+  \draw [->] (training) edge (optim);
+  \draw [->] (inference) edge (plot);
+  \draw [->] (training) edge (ckpt);
+  \draw [->] (inference) edge (ckpt);
+  \draw [->] (eval) edge (ckpt);
+  \draw [->] (training) edge (dataload);
+  \draw [->] (inference) edge (dataload);
+  \draw [->] (eval) edge (dataload);
+  \draw [->] (training) edge (model);
+  \draw [->] (inference) edge (model);
+  \draw [->] (eval) edge (model);
+  \draw [->] (model) edge (configload);
+  \draw [->] (optim) edge (configload);
+  \draw [->] (loss) edge (configload);
+  \draw [->] (dataload) edge (configload);
+  \draw [->] (model) edge (torch);
+  \draw [->] (loss) edge (torch);
+  \draw [->] (optim) edge (torch);
+  \draw [->] (ckpt) edge (torch);
+  \draw [->] (dataload) edge (dataproc);
+\end{tikzpicture}
 
 \begin{figure}[H]
 \centering
