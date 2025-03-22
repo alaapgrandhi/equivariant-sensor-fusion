@@ -17,6 +17,9 @@
 }
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
+\usepackage{pdflscape}
+
+\newcommand{\ProjectName}{ESF }
 
 \input{../../Comments}
 \input{../../Common}
@@ -33,11 +36,11 @@
 \newcommand{\mthemnum}{M\themnum}
 \newcommand{\mref}[1]{M\ref{#1}}
 
-\tikzstyle{process} = [rectangle, minimum width=2cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
+\tikzstyle{process} = [rectangle, minimum width=2cm, text width=2.4cm, minimum height=1cm, text centered, draw=black, fill=gray!30]
 
 \begin{document}
 
-\title{Module Guide for \progname{}} 
+\title{Module Guide for \ProjectName} 
 \author{\authname}
 \date{\today}
 
@@ -196,7 +199,21 @@ actually be implemented.
 
 \begin{description}
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
-\item ...
+\item [\refstepcounter{mnum} \mthemnum \label{mCo}:] Config Module
+\item [\refstepcounter{mnum} \mthemnum \label{mD}:] Data Module
+\item [\refstepcounter{mnum} \mthemnum \label{mM}:] Model Module
+\item [\refstepcounter{mnum} \mthemnum \label{mCh}:] Checkpoint Module
+\item [\refstepcounter{mnum} \mthemnum \label{mT}:] Training Module
+\item [\refstepcounter{mnum} \mthemnum \label{mI}:] Inference Module
+\item [\refstepcounter{mnum} \mthemnum \label{mLo}:] Loss Module
+\item [\refstepcounter{mnum} \mthemnum \label{mE}:] Evaluation Module
+\item [\refstepcounter{mnum} \mthemnum \label{mO}:] Optimization Module
+\item [\refstepcounter{mnum} \mthemnum \label{mDP}:] Data Processing Module
+\item [\refstepcounter{mnum} \mthemnum \label{mEL}:] Equivariant Layer Module
+\item [\refstepcounter{mnum} \mthemnum \label{mOL}:] OpenPCDet Layer Module
+\item [\refstepcounter{mnum} \mthemnum \label{mPl}:] Plotting Module
+\item [\refstepcounter{mnum} \mthemnum \label{mPy}:] PyTorch Module
+\item [\refstepcounter{mnum} \mthemnum \label{mLg}:] Logging Module
 \end{description}
 
 
@@ -221,6 +238,8 @@ actually be implemented.
 & Evaluation Module\\
 & Optimization Module\\
 & Data Processing Module\\
+& Equivariant Layer Module\\
+& OpenPCDet Layer Module\\
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision Module}
@@ -274,7 +293,7 @@ to be implemented.
 \item[Implemented By:] OS
 \end{description}
 
-\subsection{Behaviour-Hiding Module}
+\subsection{Behaviour-Hiding Modules}
 
 \begin{description}
 \item[Secrets:]The contents of the required behaviours.
@@ -286,21 +305,112 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Input Format Module (\mref{mInput})}
-
+[Record, Library, Abstract Object, or Abstract Data Type]
+\subsubsection{A (\mref{mB})}
 \begin{description}
-\item[Secrets:]The format and structure of the input data.
-\item[Services:]Converts the input data into the data structure used by the
-  input parameters module.
-\item[Implemented By:] [Your Program Name Here]
-\item[Type of Module:] [Record, Library, Abstract Object, or Abstract Data Type]
-  [Information to include for leaf modules in the decomposition by secrets tree.]
+\item[Secrets:] 
+\item[Services:]
+\item[Implemented By:] 
+\item[Type of Module:] 
 \end{description}
 
+\subsubsection{Config Module (\mref{mCo})}
+\begin{description}
+\item[Secrets:] The format and structure of the input configuration.
+\item[Services:] Loads the configuration from a predefined file and makes it accessible to other modules.
+\item[Implemented By:] \ProjectName{} 
+\item[Type of Module:] Abstract Object
+\end{description}
+
+\subsubsection{Data Module (\mref{mD})}
+\begin{description}
+\item[Secrets:] The format and structure of the training and evaluation datasets along with their respective loaders.
+\item[Services:] Loads the input data and packages it in a form (a dataloader) that facilitates batched training.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Abstract Data Type
+\end{description}
+
+\subsubsection{Model Module (\mref{mM})}
+\begin{description}
+\item[Secrets:] The format and structure of the deep learning fusion model.
+\item[Services:] Forms a learnable and differentiable mapping from input images and LiDAR to predicted bounding boxes.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Abstract Data Type
+\end{description}
 \subsubsection{Etc.}
 
+\subsubsection{Checkpoint Module (\mref{mCh})}
+\begin{description}
+\item[Secrets:] The methods for saving and loading a model from the file system..
+\item[Services:] Allows for the saving of trained models to the file system and the loading of model weights from the file system.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Library
+\end{description}
 
+\subsubsection{Training Module (\mref{mT})}
+\begin{description}
+\item[Secrets:] The process by which a model is trained on the input dataset.
+\item[Services:] Trains the model on the input dataset using the loss function and the optimizer specified in the configuration file.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Library
+\end{description}
 \subsection{Software Decision Module}
+
+\subsubsection{Inference Module (\mref{mI})}
+\begin{description}
+\item[Secrets:] The process by which a model is run in inference on some input scene.
+\item[Services:] Uses a trained model to produce a visualization of predicted bounding boxes on an input scene.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Loss Module (\mref{mLo})}
+\begin{description}
+\item[Secrets:] The method by which a loss value is produced from a given input.
+\item[Services:] Compares a model's predicted bounding boxes to the ground truth bounding boxes for a given scene in order to produce a loss value.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Abstract Data Type
+\end{description}
+
+\subsubsection{Evaluation Module (\mref{mE})}
+\begin{description}
+\item[Secrets:] The method by which a model is evaluated. 
+\item[Services:] Compares a model's predicted bounding boxes to the ground truth bounding boxes on some evaluation set to produce an mAP metric for the model.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Optimization Module (\mref{mO})}
+\begin{description}
+\item[Secrets:] The method by which a model's parameters are updated.
+\item[Services:] Updates a model's parameters according to the gradients stored on them using the ADAM algorithm. These gradients themselves are generated by the Loss module.
+\item[Implemented By:] \ProjectName{}
+\item[Type of Module:] Abstract Data Type
+\end{description}
+
+\subsubsection{Data Processing Module (\mref{mDP})}
+\begin{description}
+\item[Secrets:] The method by which input data is converted into a usable format.
+\item[Services:] Converts the input images and input LiDAR into a PyTorch Tensor format that can directly be used for training.
+\item[Implemented By:] \ProjectName{} 
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{Equivariant Layer Module (\mref{mEL})}
+\begin{description}
+\item[Secrets:] The format and the structure of the equivariant layers that will be used to enhance fusion object detection performance.
+\item[Services:] Creates equivariant layers that can then be put together to comprise the model. 
+\item[Implemented By:] \ProjectName{} using escnn (\cite{cesa2022a}) and equivariant transformer (\cite{tai2019equivariant})
+\item[Type of Module:] Abstract Data Type
+\end{description}
+
+\subsubsection{OpenPCDet Layer Module (\mref{mOL})}
+\begin{description}
+\item[Secrets:] The format and the structure of the existing OpenPCDet layers.
+\item[Services:] Creates layers that can be put together to form the base BEVFusion model and that will be used for parts of the model.
+\item[Implemented By:] OpenPCDet (\cite{openpcdet2020})
+\item[Type of Module:] Abstract Data Type
+\end{description}
 
 \begin{description}
 \item[Secrets:] The design decision based on mathematical theorems, physical
@@ -308,12 +418,32 @@ to be implemented.
   \emph{not} described in the SRS.
 \item[Services:] Includes data structure and algorithms used in the system that
   do not provide direct interaction with the user. 
-  % Changes in these modules are more likely to be motivated by a desire to
-  % improve performance than by externally imposed changes.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Etc.}
+\subsubsection{Plotting Module (\mref{mPl})}
+\begin{description}
+\item[Secrets:] The method by which to generate 3D visualizations of bounding box predictions
+\item[Services:] Provides methods which allow for LiDAR pointcloud scenes to be plotted in 3D alongside ground truth and predicted bounding boxes. 
+\item[Implemented By:] \ProjectName{} using Open3D
+\item[Type of Module:] Library
+\end{description}
+
+\subsubsection{PyTorch Module (\mref{mPy})}
+\begin{description}
+\item[Secrets:] The set of data structures and algorithms contained within the PyTorch library
+\item[Services:] Allows for the creation of datasets, dataloaders, and models for the purposes of Deep-Learning training
+\item[Implemented By:] PyTorch
+\item[Type of Module:] Records, Libraries, Abstract Data Types
+\end{description}
+
+\subsubsection{Logging Module (\mref{mLg})}
+\begin{description}
+\item[Secrets:] The method by which to log statistics about model training and evaluation.
+\item[Services:] Logs loss during training and mAP during evaluation to a file where they can be easily visualized later.
+\item[Implemented By:] \ProjectName using a wrapper around Tensorboard
+\item[Type of Module:] Abstract Object
+\end{description}
 
 \section{Traceability Matrix} \label{SecTM}
 
@@ -392,49 +522,79 @@ arrows in the diagram typically correspond to the presence of import statement.}
 \wss{If module A uses module B, the arrow is directed from A to B.}
 
 \newpage
-\begin{tikzpicture}[node distance=3cm]
-  \node (training) [process] {Training};
-  \node (inference) [process, right of=training] {Inference};
-  \node (eval) [process, right of=inference] {Evaluation};
-  \node (loss) [process, below of=training] {Loss};
-  \node (optim) [process, right of=loss, xshift=-0.5cm] {Optimizer};
-  \node (plot) [process, right of=optim, xshift=-0.5cm] {Plotting};
-  \node (ckpt) [process, right of=plot] {Checkpoint};
-  \node (dataload) [process, right of=ckpt] {Data Loading};
-  \node (model) [process, left of=loss] {Model};
-  \node (dataproc) [process, below of=dataload] {Data Processing};
-  \node (configload) [process, below of=model, xshift=-1cm] {Config Loading};
-  \node (torch) [process, right of=configload, xshift=2cm] {PyTorch};
-  
-  \draw [->] (training) edge (loss);
-  \draw [->] (training) edge (optim);
-  \draw [->] (inference) edge (plot);
-  \draw [->] (training) edge (ckpt);
-  \draw [->] (inference) edge (ckpt);
-  \draw [->] (eval) edge (ckpt);
-  \draw [->] (training) edge (dataload);
-  \draw [->] (inference) edge (dataload);
-  \draw [->] (eval) edge (dataload);
-  \draw [->] (training) edge (model);
-  \draw [->] (inference) edge (model);
-  \draw [->] (eval) edge (model);
-  \draw [->] (model) edge (configload);
-  \draw [->] (optim) edge (configload);
-  \draw [->] (loss) edge (configload);
-  \draw [->] (dataload) edge (configload);
-  \draw [->] (model) edge (torch);
-  \draw [->] (loss) edge (torch);
-  \draw [->] (optim) edge (torch);
-  \draw [->] (ckpt) edge (torch);
-  \draw [->] (dataload) edge (dataproc);
-\end{tikzpicture}
+\begin{landscape}
+  \begin{figure}
+    \centering
+    \begin{tikzpicture}[node distance=3cm]
+      \node (training) [process] {Training};
+      \node (inference) [process, right of=training] {Inference};
+      \node (eval) [process, right of=inference] {Evaluation};
+      \node (logger) [process, below of=training, xshift=-6.9cm] {Logger};
+      \node (model) [process, right of=logger, xshift=-0.1cm] {Model};
+      \node (loss) [process, right of=model, xshift=-0.1cm] {Loss};
+      \node (optim) [process, right of=loss, xshift=-0.1cm] {Optimizer};
+      \node (plot) [process, right of=optim, xshift=-0.1cm] {Plotting};
+      \node (ckpt) [process, right of=plot, xshift=-0.1cm] {Checkpoint};
+      \node (data) [process, right of=ckpt, xshift=-0.1cm] {Data};
+      \node (hardware) [process, below of=logger] {Hardware Hiding};
+      \node (eqlayers) [process, right of=hardware, xshift=0.5cm] {Equivariant \newline Layers};
+      \node (pcdetlayers) [process, right of=eqlayers, xshift=0.5cm] {OpenPCDet Layers}; 
+      \node (torch) [process, below of=pcdetlayers, xshift=2.9cm] {PyTorch};
+      \node (config) [process, right of=torch, xshift=0.5cm] {Config};
+      \node (dataproc) [process, right of=config, xshift=0.5cm] {Data Processing};
+      
+      \draw [->, color=green] (eval) |- (7.6, -1) .. controls (8.1, -1.75) and (8.1, -2.25) .. (ckpt);
+      \draw [->, color=green] (eval) |- (10.5, -1) .. controls (11, -1.75) and (11, -2.25) .. (data);
+      \draw [->, color=green] (eval) |- (-4, -1) .. controls (-4.5, -1.75) and (-4.5, -2.25) .. (model);
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
-\caption{Use hierarchy among modules}
-\label{FigUH}
-\end{figure}
+      \draw [->, color=blue] (inference) |- (4.7, -1.5) -- (plot);
+      \draw [->, color=blue] (inference) |- (7.6, -1.5) .. controls (7.85, -1.75) and (7.85, -2.25) .. (ckpt);
+      \draw [->, color=blue] (inference) |- (10.5, -1.5) .. controls (10.75, -1.75) and (10.75, -2.25) .. (data);
+      \draw [->, color=blue] (inference) |- (-4, -1.5) .. controls (-4.25, -1.75) and (-4.25, -2.25) .. (model);
+
+      \draw [->] (training) |- (-1.1, -2) -- (loss);
+      \draw [->] (training) |- (1.8, -2) -- (optim);
+      \draw [->] (training) |- (7.6, -2) -- (ckpt);
+      \draw [->] (training) |- (-4, -2) -- (model);
+      \draw [->] (training) |- (10.5, -2) -- (data);
+      \draw [->] (training) |- (-6.9, -2) -- (logger);
+
+      \draw [->, color=green] (data) |- (6.5, -3.75) .. controls (7.25, -6) and (7.25, -8) .. (config);
+      \draw [->, color=green] (data) |- (10, -3.75) -- (dataproc);
+      \draw [->, color=green] (data) |- (-6.9, -3.75) .. controls (-7.65, -4.5) and (-7.65, -4.75) .. (hardware);
+
+      \draw [->, color=blue] (ckpt) |- (3, -4) .. controls (3.75, -6) and (3.75, -8) .. (torch);
+      \draw [->, color=blue] (ckpt) |- (-6.9, -4) .. controls (-7.4, -4.5) and (-7.4, -4.75) .. (hardware);
+
+      \draw [->, color=purple] (plot) |- (-6.9, -4.25) .. controls (-7.15, -4.5) and (-7.15, -4.75) .. (hardware);
+
+      \draw [->, color=gray] (optim) |- (6.5, -4.5) .. controls (7, -6) and (7, -8) .. (config);
+      \draw [->, color=gray] (optim) |- (3, -4.5) .. controls (3.5, -6) and (3.5, -8) .. (torch);
+      
+      \draw [->, color=red] (loss) |- (3, -4.75) .. controls (3.25, -6) and (3.25, -8) .. (torch);
+      \draw [->, color=red] (loss) |- (6.5, -4.75) .. controls (6.75, -6) and (6.75, -8) .. (config);
+
+      \draw [->] (model) |- (6.5, -5) -- (config);
+      \draw [->] (model) |- (-3.4, -5) -- (eqlayers);
+      \draw [->] (model) |- (0.1, -5) -- (pcdetlayers);
+      \draw [->] (model) |- (3, -5) -- (torch);
+
+      \draw [->, color=teal] (logger) |- (-6.9, -3.75) -- (hardware);
+
+      \draw [->, color=teal] (eqlayers) |- (3, -7.5) .. controls (2.5, -7.75) and (2.5, -8.25) .. (torch);
+      
+      \draw [->, color=purple] (pcdetlayers) |- (3, -7) .. controls (2.75, -7.75) and (2.75, -8.25) .. (torch);
+    \end{tikzpicture}
+    \caption{Use hierarchy among modules}\label{FigUH}
+  \end{figure}
+\end{landscape}
+
+% \begin{figure}[H]
+% \centering
+% %\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
+% \caption{Use hierarchy among modules}
+% \label{FigUH}
+% \end{figure}
 
 %\section*{References}
 

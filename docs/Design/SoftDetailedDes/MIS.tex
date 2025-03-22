@@ -168,7 +168,14 @@ The following table is taken directly from the Module Guide document for this pr
 
 
 \subsection{Uses}
-
+\begin{enumerate}
+  \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
+  \item PyTorch Optimizer (\href{https://pytorch.org/docs/stable/optim.html}{PyTorch Documentation})
+  \item PyTorch Loss (\href{https://pytorch.org/docs/stable/nn.html#loss-functions}{PyTorch Documentation})
+  \item Model
+  \item Checkpoint
+  \item Logger
+\end{enumerate}
 
 \subsection{Syntax}
 
@@ -181,13 +188,11 @@ The following table is taken directly from the Module Guide document for this pr
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-trainEpoch & Dataloader, Model, Loss, Optimizer & - & - \\
-\hline
-train & Dataloader, Model, Loss, Optimizer & - & - \\
+train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimizer, Model, Loss& - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -196,14 +201,11 @@ train & Dataloader, Model, Loss, Optimizer & - & - \\
 
 \subsubsection{State Variables}
 
-N/A
 
 \subsubsection{Environment Variables}
 
-File System
 
 \subsubsection{Assumptions}
-
 
 
 \subsubsection{Access Routine Semantics}
@@ -211,14 +213,29 @@ File System
 
 \noindent train():
 \begin{itemize}
-\item transition: Saving model as a checkpoint on the file system. 
+\item transition: N/A 
 \item output: N/A
 \item exception: N/A
 \end{itemize}
 
 \subsubsection{Local Functions}
 
-Is trainEpoch a local function? It updates the model using the optimizer, dataset, and loss function.
+\begin{enumerate}
+  \item \textbf{trainEpoch}(trainDataloader, optimizer, model, loss):
+  \begin{enumerate}
+    \item \textbf{Input:} The dataloader of training data, the model to be optimized, the ADAM optimizer, and the loss function for backpropagation.
+    \item \textbf{Method Description:} This method optimizes the model over the input training data to lower the given loss that the model incurs. 
+    Statistics describing the performance of the model (loss) over the training set are logged using the global logger.
+    \item \textbf{Output:} N/A 
+  \end{enumerate}
+  \item \textbf{evalModel}(evalDataloader, model):
+  \begin{enumerate}
+    \item \textbf{Input:} The dataloader of evaluation data and the model to be evaluated.
+    \item \textbf{Method Description:} This method collects the mAP metrics obtained from applying the current model to the evaluation dataset. These
+    metrics are logged using the global logger. The current state of the model is additionally saved using the checkpointing system.
+    \item \textbf{Output:} N/A
+  \end{enumerate}
+\end{enumerate}
 
 \newpage
 
@@ -229,6 +246,83 @@ Is trainEpoch a local function? It updates the model using the optimizer, datase
 
 
 \subsection{Uses}
+\begin{itemize}
+  \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
+  \item Checkpoint
+  \item Model
+  \item Logger
+\end{itemize}
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+
+
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+
+\subsubsection{Environment Variables}
+
+
+\subsubsection{Assumptions}
+
+
+
+\subsubsection{Access Routine Semantics}
+\noindent inference():
+\begin{itemize}
+\item transition: N/A 
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+\subsubsection{Local Functions}
+\begin{enumerate}
+  \item \textbf{getPredBoundingBoxes}(Images, LiDAR, Model):
+  \begin{enumerate}
+    \item \textbf{Input:} The model to be used for inference in addition to the input data (multiview camera images and a LiDAR pointcloud).
+    \item \textbf{Method Description:} This method uses the model to get a set of predicted bounding boxes for the given input data.
+    \item \textbf{Output:} The predicted bounding boxes.
+  \end{enumerate}
+  \item \textbf{plotBoundingBoxes}(LiDAR, gtBoundingBoxes, predBoundingBoxes):
+  \begin{enumerate}
+    \item \textbf{Input:} The input LiDAR pointcloud alongside the ground truth and predicted bounding boxes for this scene. 
+    \item \textbf{Method Description:} This method displays a 3D plot of the ground truth and predicted bounding boxes on the input LiDAR pointcloud to allow for visual inspection (using the plotting module).
+    \item \textbf{Output:} N/A
+  \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\section{MIS of Evaluation Module} \label{Module} 
+
+\subsection{Module}
+
+
+
+\subsection{Uses}
+\begin{itemize}
+  \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
+  \item Model
+  \item Checkpoint
+\end{itemize}
 
 
 \subsection{Syntax}
@@ -242,42 +336,37 @@ Is trainEpoch a local function? It updates the model using the optimizer, datase
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-infer?? & Dataloader, Model & - & - \\
-\hline
-\end{tabular}
+  \begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+  \hline
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+  \hline
+  eval & PyTorch Dataloader (Eval), Model, Checkpoint (Optional) & Evaluation Metrics & - \\
+  \hline
+  \end{tabular}
 \end{center}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
 
-N/A
 
 \subsubsection{Environment Variables}
 
-Screen
 
 \subsubsection{Assumptions}
 
 
 
 \subsubsection{Access Routine Semantics}
-
-
-\noindent infer():
+\noindent eval():
 \begin{itemize}
-\item transition: Displaying the predicted bounding boxes in the LiDAR pointcloud on the screen.
-\item output: N/A
+\item transition: N/A 
+\item output: This function will run the input model over the evaluation loader and collect the mAP statistics over this set of data. These statistics will then be returned as output. If a checkpoint is passed in, the model will first load the given checkpoint.
 \item exception: N/A
 \end{itemize}
 
 \subsubsection{Local Functions}
 
-Not yet done
 
 \newpage
 
@@ -285,68 +374,62 @@ Not yet done
 
 \subsection{Module}
 
-
-
 \subsection{Uses}
-
+\begin{itemize}
+  \item Is a subclass of PyTorch Module (\href{https://pytorch.org/docs/stable/generated/torch.nn.Module.html}{PyTorch Documentation})
+  \item Equivariant Layers
+  \item OpenPCDet Layers
+  \item Configuration
+\end{itemize}
 
 \subsection{Syntax}
 
-
-
 \subsubsection{Exported Constants}
-
-
 
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-init & Configuration File & - & - \\
-\hline
-forward & Camera Images, LiDAR Data & Bounding Boxes & - \\
-\hline
-\end{tabular}
+  \begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+  \hline
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+  \hline
+  init & - & - & - \\
+  \hline
+  forward & Images, LiDAR & Predicted Bounding Boxes & - \\
+  \hline
+  \end{tabular}
 \end{center}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-
-Model parameters,
-Hyperparameters
+\begin{itemize}
+  \item pcdetLayers
+  \item eqLayers
+\end{itemize}
 
 \subsubsection{Environment Variables}
 
-N/A
 
 \subsubsection{Assumptions}
 
-
-
 \subsubsection{Access Routine Semantics}
-
-
 \noindent init():
 \begin{itemize}
-\item transition: Sets the hyperparameters according to the configuration file.
+\item transition: This function will load the model-related configuration from the global configuration module and will then create the OpenPCDet and Equivariant Layers accordingly. References to these layers will be stored in the pcdetLayers and eqLayers state variables. 
 \item output: N/A
 \item exception: N/A
 \end{itemize}
 
 \noindent forward():
 \begin{itemize}
-\item transition: N/A
-\item output: Outputs predicted bounding boxes for the input Camera Images and LiDAR Pointcloud.
+\item transition: N/A 
+\item output: This function will run the input data (LiDAR and Images) through the OpenPCDet and Equivariant layers to produce a set of predicted bounding boxes. These predicted bounding boxes will then be returned. 
 \item exception: N/A
 \end{itemize}
 
 \subsubsection{Local Functions}
 
-Not yet done
 
 \newpage
 
@@ -358,6 +441,10 @@ Not yet done
 
 \subsection{Uses}
 
+\begin{itemize}
+  \item Is a subclass of PyTorch Loss (\href{https://pytorch.org/docs/stable/nn.html#loss-functions}{PyTorch Documentation})
+  \item Configuration
+\end{itemize}
 
 \subsection{Syntax}
 
@@ -370,13 +457,13 @@ Not yet done
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\begin{tabular}{p{2cm}|p{6cm}|p{4cm}|p{2cm}}
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & Configuration File & - & - \\
+init & - & - & - \\
 \hline
-forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss "Value" & - \\
+forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss Value & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -385,40 +472,410 @@ forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss "Value" &
 
 \subsubsection{State Variables}
 
-Hyperparameters
+\begin{itemize}
+  \item hyperparameters
+\end{itemize}
 
 \subsubsection{Environment Variables}
 
-N/A
-
 \subsubsection{Assumptions}
 
-
-
 \subsubsection{Access Routine Semantics}
-
-
 \noindent init():
 \begin{itemize}
-\item transition: Sets the hyperparameters according to the configuration file.
+\item transition: This method will set the loss module's hyperparamters according to the loss-related configuration from the global configuration module. 
 \item output: N/A
 \item exception: N/A
 \end{itemize}
 
 \noindent forward():
 \begin{itemize}
-\item transition: N/A
-\item output: Outputs the loss between the predicted and ground truth bounding boxes.
+\item transition: N/A 
+\item output: This method will use the predicted and ground truth bounding boxes to regress and output a loss value.
 \item exception: N/A
 \end{itemize}
 
 \subsubsection{Local Functions}
 
-Not yet done
+\newpage
+
+\section{MIS of Optimizer Module} \label{Module} 
+
+\subsection{Module}
+
+
+
+\subsection{Uses}
+\begin{itemize}
+  \item Is a wrapper around the PyTorch ADAM Optimizer (\href{https://pytorch.org/docs/stable/optim.html}{PyTorch Documentation})
+  \item PyTorch Parameter (\href{https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html}{PyTorch Documentation})
+  \item Configuration
+\end{itemize}
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+
+
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+init & Model Parameters & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+\begin{itemize}
+  \item hyperparameters
+  \item modelParameters
+\end{itemize}
+
+\subsubsection{Environment Variables}
+
+
+
+\subsubsection{Assumptions}
+
+
+
+\subsubsection{Access Routine Semantics}
+\noindent init():
+\begin{itemize}
+\item transition: This method will set the loss module's hyperparameters according to the optimizer-related configuration from the global configuration module. It will also save a reference to passed in model parameters in the modelParameters state variable.
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+\subsubsection{Local Functions}
 
 \newpage
 
-\section{MIS of Data Loading Module} \label{Module} 
+\section{MIS of Plotting Module} \label{Module} 
+
+\subsection{Module}
+
+
+
+\subsection{Uses}
+\begin{itemize}
+  \item Open3D Oriented Bounding Boxes (\href{https://www.open3d.org/docs/latest/python_api/open3d.geometry.OrientedBoundingBox.html}{Open3D Documentation})
+  \item Open3D Pointclouds (\href{https://www.open3d.org/docs/release/python_api/open3d.geometry.PointCloud.html}{Open3D Documentation})
+  \item Open3D in general (\href{https://www.open3d.org/docs/release/introduction.html}{Open3D Documentation})
+\end{itemize}
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+
+
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+plot & Ground Truth Bounding Boxes, Predicted Bounding Boxes, LiDAR & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+\subsubsection{Environment Variables}
+
+\begin{itemize}
+  \item Computer Screen
+\end{itemize}
+
+\subsubsection{Assumptions}
+
+
+
+\subsubsection{Access Routine Semantics}
+\noindent plot():
+\begin{itemize}
+\item transition: The LiDAR pointcloud is first converted into an Open3D Pointcloud. Then, the bounding boxes are converted into the Open3d OrientedBoundingBox type. Finally, these are all visualized together in a single 3D plot using Open3D's draw\_geometries function. This outputs a plot and thus updates the computer screen environment variable.
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+\subsubsection{Local Functions}
+
+\newpage
+
+\section{MIS of Checkpoint Module} \label{Module} 
+
+\subsection{Module}
+
+
+
+\subsection{Uses}
+\begin{itemize}
+  \item PyTorch Model (\href{https://pytorch.org/docs/stable/generated/torch.nn.Module.html}{PyTorch Documentation})
+  \item PyTorch State Dictionary (\href{https://pytorch.org/tutorials/beginner/saving_loading_models.html}{PyTorch Documentation})
+\end{itemize}
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+
+
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{3cm}|p{5cm}|p{2cm}|p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+saveCheckpoint & Model, Checkpoint Path & - & - \\
+\hline
+loadCheckpoint & Model, Checkpoint Path & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+
+
+\subsubsection{Environment Variables}
+
+\begin{itemize}
+  \item File System
+\end{itemize}
+
+\subsubsection{Assumptions}
+
+
+
+\subsubsection{Access Routine Semantics}
+\noindent saveCheckpoint():
+\begin{itemize}
+\item transition: The input model's state dictionary is saved to a pytorch tensor file at the input path. 
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+
+\noindent loadCheckpoint():
+\begin{itemize}
+\item transition: The input model's parameters are set using the state dictionary saved at the input path.
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+
+\subsubsection{Local Functions}
+
+\newpage
+
+\section{MIS of Data Module} \label{Module} 
+
+\subsection{Module}
+
+
+
+\subsection{Uses}
+\begin{enumerate}
+  \item PyTorch Dataset and Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
+  \item Configuration
+\end{enumerate}
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+
+
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{3cm}|p{5cm}|p{4cm}|p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+init & isEval Boolean & - & - \\
+\hline
+getDataloader & - & PyTorch Dataloader & -  \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+\begin{itemize}
+  \item dataset
+\end{itemize}
+
+\subsubsection{Environment Variables}
+\begin{enumerate}
+  \item File System
+\end{enumerate}
+
+\subsubsection{Assumptions}
+
+
+
+\subsubsection{Access Routine Semantics}
+\noindent init():
+\begin{itemize}
+\item transition: This function will load the data-related configuration from the global configuration module and will then create the dataset accordingly.
+This dataset will either be the NuScenes (\cite{caesar2020nuscenes}) or the Waymo (\cite{sun2020scalability}) dataset for now and will be stored in the dataset state variable. If isEval is false,
+the training portion of the dataset will be loaded. If isEval is true, the evaluation portion of the dataset will be loaded.
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+\noindent getDataloader():
+\begin{itemize}
+  \item transition: N/A
+  \item output: This function will use the dataset state variable to create a PyTorch Dataloader which will then be returned.
+  \item exception: N/A
+\end{itemize}
+
+\subsubsection{Local Functions}
+
+\newpage
+
+\section{MIS of Equivariant Layers Module} \label{Module} 
+
+This module is meant to represent the equivariant layers I will be adding into the OpenPCDet repository for the novel part
+of my project. To provide context for the reader, equivariant layers
+refer to neural network layers that preserve input transformations when generating output features. For example, a rotated image of a cat 
+will result in similarly rotated output features (when compared to features generated from an upright image of a cat). This work by Cohen et Al. (\cite{cohen2016group})
+more clearly explains this concept.
+
+
+This module will encapsulate two different types of equivariant layers. The first of these is steerable kernel 
+equivariant CNNs (\cite{cohen2016steerable}) extended to include both 2D and 3D symmetries using the escnn repository (\cite{cesa2022a}). 
+The second of these is equivariant transformer networks (\cite{tai2019equivariant}). Existing OpenPCDet layers can essentially then be directly
+swapped out for these equivariant alternatives. 
+
+\subsection{Module}
+
+
+
+\subsection{Uses}
+\begin{itemize}
+  \item PyTorch Parameter (\href{https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html}{PyTorch Documentation})
+  \item Steerable CNNs (\cite{cesa2022a})
+  \item Equivariant Transformers (\cite{tai2019equivariant})
+\end{itemize}
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+
+
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm}|p{6cm}|p{4cm}|p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+init & - & - & - \\
+\hline
+forward & - & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+\begin{itemize}
+  \item layerParameters
+\end{itemize}
+
+\subsubsection{Environment Variables}
+
+
+
+\subsubsection{Assumptions}
+
+
+
+\subsubsection{Access Routine Semantics}
+\noindent init():
+\begin{itemize}
+\item transition: The parameters for the layer are randomly initialized according to a uniform distribution around 0 (saved in the layerParameters state variable). 
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+
+\noindent forward():
+\begin{itemize}
+\item output:
+\begin{itemize}
+  \item \textbf{For the CNN case:} Since the CNN case is simpler, the math relating to it can be shown here itself. The result $y$ of this formula is returned:
+  \newline\newline
+  $y[m,n](k,x)=\sum_{i=-w}^{w}\sum_{j=-h}^{h}k[w+i,h+j]x[m+i,n+j]\rightarrow{}y(k,x)=k*x$ \newline
+  such that if $x_{2}=gx_{1}$ for some $g$ in the group of considered transformations, $y(x_{2})=\rho(g)y(x_{1})$
+  for a single function $\rho$.
+  \newline
+  \item \textbf{For the Transformer case:} The math here is more complicated and so I will simply refer the reader to the paper by Tai et. al (\cite{tai2019equivariant}). The output of this layer is returned. Generally though for attention function f,
+  the following can be written similar to the CNN case:
+  $x_{2}=gx_{1} \rightarrow{} y(k,x_{2})=\rho(g)y(k,x_{1})$ 
+\end{itemize}
+\end{itemize}
+
+\subsubsection{Local Functions}
+
+\newpage
+
+\section{MIS of OpenPCDet Layers Module} \label{Module} 
+This module is simply used to represent the existing layers in the OpenPCDet library (\cite{openpcdet2020}).
+Rather than highlight specific relevant layer types and modules, I would encourage the reader to read through the BEVFusion (\cite{liang2022bevfusion})
+configuration file (\href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{BEVFusion Config File}) and 
+associated code sections (\href{https://github.com/open-mmlab/OpenPCDet/tree/master/pcdet/models}{Model-Related OpenPCDet Code}).
+
+\newpage
+
+\section{MIS of PyTorch Module} \label{Module} 
+This module is simply used to represent the PyTorch library referenced in the other modules.
+The main list of components that are used from this library is as follows:
+\begin{itemize}
+  \item PyTorch Module (\href{https://pytorch.org/docs/stable/generated/torch.nn.Module.html}{PyTorch Documentation})
+  \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
+  \item PyTorch Optimizer (\href{https://pytorch.org/docs/stable/optim.html}{PyTorch Documentation})
+  \item PyTorch Loss (\href{https://pytorch.org/docs/stable/nn.html#loss-functions}{PyTorch Documentation})
+  \item PyTorch State Dictionary (\href{https://pytorch.org/tutorials/beginner/saving_loading_models.html}{PyTorch Documentation})
+  \item PyTorch Parameter (\href{https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html}{PyTorch Documentation})
+\end{itemize}
+
+\newpage
+
+\section{MIS of Config Module} \label{Module} 
 
 \subsection{Module}
 
@@ -432,58 +889,160 @@ Not yet done
 
 
 \subsubsection{Exported Constants}
-
+\begin{itemize}
+  \item CONFIG\_PATH
+\end{itemize}
 
 
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\begin{tabular}{p{2cm}|p{6cm}|p{4cm}|p{2cm}}
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & Configuration File & - & - \\
+init & - & - & - \\
+\hline
+getModelConfig & - & - & - \\
+\hline
+getDataConfig & - & - & - \\
+\hline
+getOptimConfig & - & - & - \\
+\hline
+getLossConfig & - & - & - \\
 \hline
 \end{tabular}
 \end{center}
-
-Iterator stuff?
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
 
-Dataset,
-Dataloader
+\begin{itemize}
+  \item modelConfig
+  \item dataConfig 
+  \item optimConfig 
+  \item lossConfig
+\end{itemize}
 
 \subsubsection{Environment Variables}
 
-N/A
+\begin{itemize}
+  \item File System
+\end{itemize}
 
 \subsubsection{Assumptions}
 
 
 
 \subsubsection{Access Routine Semantics}
-
-
 \noindent init():
 \begin{itemize}
-\item transition: Sets up the dataset and the data loader using the configuration.
-\item output: N/A
+  \item transition: This method loads the yaml configuration file stored at the predefined constant path CONFIG\_PATH. Then, the dictionary loaded from this JSON file is split into model, data, optimizer, and loss sections. Each of these is saved to the corresponding state variable for this module.
+  \item output: N/A
+  \item exception: N/A
+\end{itemize}
+
+\noindent getModelConfig():
+\begin{itemize}
+\item transition: N/A 
+\item output: This method returns the configuration parameters for the model module.
+\item exception: N/A
+\end{itemize}
+
+\noindent getDataConfig():
+\begin{itemize}
+  \item transition: N/A
+  \item output: This method returns the configuration parameters for the data module.
+  \item exception: N/A
+\end{itemize}
+
+\noindent getOptimConfig():
+\begin{itemize}
+  \item transition: N/A
+  \item output: This method returns the configuration parameters for the optimizer module.
+  \item exception: N/A
+\end{itemize}
+
+\noindent getLossConfig():
+\begin{itemize}
+  \item transition: N/A
+  \item output: This method returns the configuration parameters for the loss module.
+  \item exception: N/A
+\end{itemize}
+
+\subsubsection{Local Functions}
+
+\newpage
+
+\section{MIS of Data Processing Module} \label{Module} 
+
+\subsection{Module}
+
+
+
+\subsection{Uses}
+\begin{itemize}
+  \item 
+\end{itemize}
+
+\subsection{Syntax}
+
+
+
+\subsubsection{Exported Constants}
+
+
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+process & Image Path, LiDAR Path & Images, LiDAR & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+
+
+\subsubsection{Environment Variables}
+
+
+
+\subsubsection{Assumptions}
+
+\newpage
+
+
+
+\subsubsection{Access Routine Semantics}
+\noindent process():
+\begin{itemize}
+\item transition: N/A 
+\item output: Loads the multiview images and LiDAR pointcloud from their respective files and converts them into a standard PyTorch Tensor format that can be used by the model. The Tensor form of the multiview images and the LiDAR pointcloud are returned.
 \item exception: N/A
 \end{itemize}
 
 \subsubsection{Local Functions}
 
-Not yet done
 
+\section{References}
 \newpage
 
 \bibliographystyle {plainnat}
 \bibliography {../../../refs/References}
 
 \newpage
+
+
+
 
 \section{Appendix} \label{Appendix}
 
