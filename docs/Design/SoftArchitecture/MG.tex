@@ -41,7 +41,7 @@
 \begin{document}
 
 \title{Module Guide for \ProjectName} 
-\author{\authname}
+\author{Alaap Grandhi}
 \date{\today}
 
 \maketitle
@@ -53,8 +53,8 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Mar 21 & 1.0 & Initial Draft\\
+Mar 22 & 1.1 & Added Anticipated and Unlikely Changes\\
 \bottomrule
 \end{tabularx}
 
@@ -79,9 +79,8 @@ This section records information for easy reference.
   R & Requirement\\
   SC & Scientific Computing \\
   SRS & Software Requirements Specification\\
-  \progname & Explanation of program name\\
+  \ProjectName & Equivariant Sensor Fusion\\
   UC & Unlikely Change \\
-  \wss{etc.} & \wss{...}\\
   \bottomrule
 \end{tabular}\\
 
@@ -167,13 +166,17 @@ change.
 \item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
   hardware on which the software is running.
 \item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
-  initial input data.
-\item ...
+  input images and LiDAR.
+\item[\refstepcounter{acnum} \actheacnum \label{acLoss}:] The loss function used for training.
+\item[\refstepcounter{acnum} \actheacnum \label{acEQLayers}:] The specific equivariant layer implementation
+  used.
+\item[\refstepcounter{acnum} \actheacnum \label{acOptim}:] The specific version of ADAM used for optimization.
+\item[\refstepcounter{acnum} \actheacnum \label{acData}:] The choice of training datasets (expanding beyond just NuScenes and Waymo).
+\item[\refstepcounter{acnum} \actheacnum \label{acMetric}:] The metrics collected for evaluation (adding more than just mAP).
+\item[\refstepcounter{acnum} \actheacnum \label{acLogging}:] The choice of library for logging. 
+\item[\refstepcounter{acnum} \actheacnum \label{acConfig}:] The configuration file format.
+\item[\refstepcounter{acnum} \actheacnum \label{acPlots}:] The choice of library for generating 3D visualizations of predicted bounding boxes.    
 \end{description}
-
-\wss{Anticipated changes relate to changes that would be made in requirements,
-design or implementation choices.  They are not related to changes that are made
-at run-time, like the values of parameters.}
 
 \subsection{Unlikely Changes} \label{SecUchange}
 
@@ -185,9 +188,10 @@ will potentially need to be modified. Hence, it is not intended that these
 decisions will be changed.
 
 \begin{description}
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucPyTorch}:] The use of PyTorch in the construction of many of the modules.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucDL}:] The use of a deep-learning based model.
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucSL}:] The use of supervised learning techniques to train the model. 
+\item[\refstepcounter{ucnum} \uctheucnum \label{ucOpenPCDet}:] The use of OpenPCDet as a foundation for the code.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -228,10 +232,10 @@ actually be implemented.
 \midrule
 
 \multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} 
-& Config Loading Module\\
-& Data Loading Module\\
+& Config Module\\
+& Data Module\\
 & Model Module\\
-& Checkpointing Module\\
+& Checkpoint Module\\
 & Training Module\\
 & Inference Module\\
 & Loss Module\\ 
@@ -258,13 +262,6 @@ actually be implemented.
 The design of the system is intended to satisfy the requirements developed in
 the SRS. In this stage, the system is decomposed into modules. The connection
 between requirements and modules is listed in Table~\ref{TblRT}.
-
-\wss{The intention of this section is to document decisions that are made
-  ``between'' the requirements and the design.  To satisfy some requirements,
-  design decisions need to be made.  Rather than make these decisions implicit,
-  they are explicitly recorded here.  For instance, if a program has security
-  requirements, a specific design decision may be made to satisfy those
-  requirements with a password.}
 
 \section{Module Decomposition} \label{SecMD}
 
@@ -458,17 +455,10 @@ requirements and between the modules and the anticipated changes.
 \toprule
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
-R1 & \mref{mHH}, \mref{mInput}, \mref{mParams}, \mref{mControl}\\
-R2 & \mref{mInput}, \mref{mParams}\\
-R3 & \mref{mVerify}\\
-R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+R1 & \mref{mDP}, \mref{mD}\\
+R2 & \mref{mDP}, \mref{mD}\\
+R3 & \mref{mHH}, \mref{mCo}, \mref{mD}, \mref{mM}, \mref{mCh}, \mref{mT}, \mref{mLo}, \mref{mE}, \mref{mO}, \mref{mDP}, \mref{mEL}, \mref{mOL}, \mref{mPy}, \mref{mLg}\\
+R4 & \mref{mHH}, \mref{mCo}, \mref{mM}, \mref{mCh}, \mref{mI}, \mref{mDP}, \mref{mEL}, \mref{mOL}, \mref{mPl}, \mref{mPy}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -482,17 +472,15 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \textbf{AC} & \textbf{Modules}\\
 \midrule
 \acref{acHardware} & \mref{mHH}\\
-\acref{acInput} & \mref{mInput}\\
-\acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mVerify}\\
-\acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
-\acref{acControl} & \mref{mControl}\\
-\acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acSolver} & \mref{mSolver}\\
-\acref{acPlot} & \mref{mPlot}\\
+\acref{acInput} & \mref{mDP}\\
+\acref{acLoss} & \mref{mLo}\\
+\acref{acEQLayers} & \mref{mEL}\\
+\acref{acOptim} & \mref{mO}\\
+\acref{acData} & \mref{mD}\\
+\acref{acMetric} & \mref{mE}\\
+\acref{acLogging} & \mref{mLg}\\
+\acref{acConfig} & \mref{mCo}\\
+\acref{acPlots} & \mref{mPl}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}
@@ -511,15 +499,6 @@ the modules. It can be seen that the graph is a directed acyclic graph
 (DAG). Each level of the hierarchy offers a testable and usable subset of the
 system, and modules in the higher level of the hierarchy are essentially simpler
 because they use modules from the lower levels.
-
-\wss{The uses relation is not a data flow diagram.  In the code there will often
-be an import statement in module A when it directly uses module B.  Module B
-provides the services that module A needs.  The code for module A needs to be
-able to see these services (hence the import statement).  Since the uses
-relation is transitive, there is a use relation without an import, but the
-arrows in the diagram typically correspond to the presence of import statement.}
-
-\wss{If module A uses module B, the arrow is directed from A to B.}
 
 \newpage
 \begin{landscape}
@@ -600,18 +579,15 @@ arrows in the diagram typically correspond to the presence of import statement.}
 
 \section{User Interfaces}
 
-\wss{Design of user interface for software and hardware.  Attach an appendix if
-needed. Drawings, Sketches, Figma}
+This section may be added in the future.
 
 \section{Design of Communication Protocols}
 
-\wss{If appropriate}
+N/A
 
 \section{Timeline}
 
-\wss{Schedule of tasks and who is responsible}
-
-\wss{You can point to GitHub if this information is included there}
+At this point in the course, it does not really make sense to do this section.
 
 \bibliographystyle {plainnat}
 \bibliography{../../../refs/References}

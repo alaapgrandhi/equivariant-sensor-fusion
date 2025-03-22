@@ -31,6 +31,8 @@ urlcolor=cyan          % color of external links
 
 \usepackage{array}
 
+\newcommand{\ProjectName}{ESF}
+
 \externaldocument{../../SRS/SRS}
 
 \input{../../Comments}
@@ -38,9 +40,9 @@ urlcolor=cyan          % color of external links
 
 \begin{document}
 
-\title{Module Interface Specification for \progname{}}
+\title{Module Interface Specification for \ProjectName{}}
 
-\author{\authname}
+\author{Alaap Grandhi}
 
 \date{\today}
 
@@ -53,8 +55,8 @@ urlcolor=cyan          % color of external links
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Mar 21 & 1.0 & First Draft\\
+Mar 22 & 1.1 & Added units/type\\
 \bottomrule
 \end{tabularx}
 
@@ -62,9 +64,7 @@ Date 2 & 1.1 & Notes\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See SRS Documentation at \wss{give url}
-
-\wss{Also add any additional symbols, abbreviations or acronyms}
+See SRS Documentation at \url{https://github.com/alaapgrandhi/equivariant-sensor-fusion/tree/main/docs/SRS}
 
 \newpage
 
@@ -77,16 +77,13 @@ See SRS Documentation at \wss{give url}
 \section{Introduction}
 
 The following document details the Module Interface Specifications for
-\wss{Fill in your project name and description}
+\ProjectName: Equivariant Learning-based Camera-LiDAR 3D object detection in Autonomous Driving.
 
 Complementary documents include the System Requirement Specifications
 and Module Guide.  The full documentation and implementation can be
-found at \url{...}.  \wss{provide the url for your repo}
+found at \url{https://github.com/alaapgrandhi/equivariant-sensor-fusion}.
 
 \section{Notation}
-
-\wss{You should describe your notation.  You can use what is below as
-  a starting point.}
 
 The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
 with the addition that template modules have been adapted from
@@ -95,7 +92,7 @@ with the addition that template modules have been adapted from
 multiple assignment statement and conditional rules follow the form $(c_1
 \Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
 
-The following table summarizes the primitive data types used by \progname. 
+The following table summarizes the primitive data types used by \ProjectName. 
 
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
@@ -113,12 +110,14 @@ real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
 \end{center}
 
 \noindent
-The specification of \progname \ uses some derived data types: sequences, strings, and
+The specification of \ProjectName \ uses some derived data types: sequences, strings, and
 tuples. Sequences are lists filled with elements of the same data type. Strings
 are sequences of characters. Tuples contain a list of values, potentially of
-different types. In addition, \progname \ uses functions, which
+different types. In addition, \ProjectName \ uses functions, which
 are defined by the data types of their inputs and outputs. Local functions are
 described by giving their type signature followed by their specification.
+
+In addition to the above, str is used to denote a sequence of chars and * is used to denote the convolution operator.
 
 \section{Module Decomposition}
 
@@ -135,16 +134,18 @@ The following table is taken directly from the Module Guide document for this pr
   \midrule
   
   \multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} 
-  & Config Loading Module\\
-  & Data Loading Module\\
+  & Config Module\\
+  & Data Module\\
   & Model Module\\
-  & Checkpointing Module\\
+  & Checkpoint Module\\
   & Training Module\\
   & Inference Module\\
   & Loss Module\\ 
   & Evaluation Module\\
   & Optimization Module\\
   & Data Processing Module\\
+  & Equivariant Layer Module\\
+  & OpenPCDet Layer Module\\
   \midrule
   
   \multirow{3}{0.3\textwidth}{Software Decision Module}
@@ -157,11 +158,10 @@ The following table is taken directly from the Module Guide document for this pr
   \caption{Module Hierarchy}
   \label{TblMH}
   \end{table}
-
 \newpage
 ~\newpage
 
-\section{MIS of Training Module} \label{Module} 
+\section{MIS of Training Module} \label{ModuleTrain} 
 
 \subsection{Module}
 
@@ -172,9 +172,9 @@ The following table is taken directly from the Module Guide document for this pr
   \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
   \item PyTorch Optimizer (\href{https://pytorch.org/docs/stable/optim.html}{PyTorch Documentation})
   \item PyTorch Loss (\href{https://pytorch.org/docs/stable/nn.html#loss-functions}{PyTorch Documentation})
-  \item Model
-  \item Checkpoint
-  \item Logger
+  \item Model (\ref{ModuleModel})
+  \item Checkpoint (\ref{ModuleCkpt})
+  \item Logger (\ref{ModuleLog})
 \end{enumerate}
 
 \subsection{Syntax}
@@ -183,7 +183,9 @@ The following table is taken directly from the Module Guide document for this pr
 
 \subsubsection{Exported Constants}
 
-
+\begin{itemize}
+  \item NUM\_EPOCHS: The number of epochs to train for.
+\end{itemize}
 
 \subsubsection{Exported Access Programs}
 
@@ -192,7 +194,7 @@ The following table is taken directly from the Module Guide document for this pr
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimizer, Model, Loss& - & - \\
+train & - & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -200,7 +202,13 @@ train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimi
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-
+\begin{itemize}
+  \item evalLoader (PyTorch Dataloader)
+  \item trainLoader (PyTorch Dataloader)
+  \item optim (Optimizer Module)
+  \item model (Model Module)
+  \item loss (Loss Module)
+\end{itemize}
 
 \subsubsection{Environment Variables}
 
@@ -213,7 +221,7 @@ train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimi
 
 \noindent train():
 \begin{itemize}
-\item transition: N/A 
+\item transition: Creates the evaluation dataloader, training dataloader, optimizer, model, and loss modules by calling their respective constructors (Data Module's constructor for the dataloaders). References to these are then stored in the corresponding state variables. Once this is done, trainEpoch and evalModel can be called in a loop for a set number of epochs (NUM\_EPOCHS).
 \item output: N/A
 \item exception: N/A
 \end{itemize}
@@ -221,14 +229,14 @@ train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimi
 \subsubsection{Local Functions}
 
 \begin{enumerate}
-  \item \textbf{trainEpoch}(trainDataloader, optimizer, model, loss):
+  \item \textbf{trainEpoch}(trainLoader (PyTorch Dataloader), optimizer (Optimizer Module), model (Model Module), loss (Loss Module)):
   \begin{enumerate}
     \item \textbf{Input:} The dataloader of training data, the model to be optimized, the ADAM optimizer, and the loss function for backpropagation.
     \item \textbf{Method Description:} This method optimizes the model over the input training data to lower the given loss that the model incurs. 
     Statistics describing the performance of the model (loss) over the training set are logged using the global logger.
     \item \textbf{Output:} N/A 
   \end{enumerate}
-  \item \textbf{evalModel}(evalDataloader, model):
+  \item \textbf{evalModel}(evalLoader (PyTorch Dataloader), model (Model Module)):
   \begin{enumerate}
     \item \textbf{Input:} The dataloader of evaluation data and the model to be evaluated.
     \item \textbf{Method Description:} This method collects the mAP metrics obtained from applying the current model to the evaluation dataset. These
@@ -239,7 +247,7 @@ train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimi
 
 \newpage
 
-\section{MIS of Inference Module} \label{Module} 
+\section{MIS of Inference Module} \label{ModuleInfer} 
 
 \subsection{Module}
 
@@ -248,9 +256,10 @@ train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimi
 \subsection{Uses}
 \begin{itemize}
   \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
-  \item Checkpoint
-  \item Model
-  \item Logger
+  \item PyTorch Tensor (\href{https://pytorch.org/docs/stable/tensors.html}{PyTorch Documentation})
+  \item Checkpoint (\ref{ModuleCkpt})
+  \item Model (\ref{ModuleModel})
+  \item Logger (\ref{ModuleLog})
 \end{itemize}
 
 \subsection{Syntax}
@@ -268,7 +277,7 @@ train & PyTorch Dataloader (Eval), PyTorch Dataloader (Training), PyTorch Optimi
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
+inference & imagePath (str), lidarPath (str), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$), Model (Model Module), Checkpoint (Checkpoint Module) & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -295,13 +304,19 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 
 \subsubsection{Local Functions}
 \begin{enumerate}
-  \item \textbf{getPredBoundingBoxes}(Images, LiDAR, Model):
+  \item \textbf{getProcessedData}(imagePath (str), lidarPath (str)) $\rightarrow$ imageTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$), lidarTens (Pytorch Tensor $R^{3\times{}n_{l}}$):
+  \begin{enumerate}
+    \item \textbf{Input:} The string paths to the image and lidar files for the scene to infer on.
+    \item \textbf{Method Description:} This method essentially is just a local wrapper for the Data Processing Module's process access program.
+    \item \textbf{Output:} The tensors for the multiview images and the LiDAR pointcloud, obtained using the Data Processing Module.
+  \end{enumerate}
+  \item \textbf{getPredBoundingBoxes}(imageTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$), lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$), Model (Model Module)) $\rightarrow$ boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$):
   \begin{enumerate}
     \item \textbf{Input:} The model to be used for inference in addition to the input data (multiview camera images and a LiDAR pointcloud).
     \item \textbf{Method Description:} This method uses the model to get a set of predicted bounding boxes for the given input data.
     \item \textbf{Output:} The predicted bounding boxes.
   \end{enumerate}
-  \item \textbf{plotBoundingBoxes}(LiDAR, gtBoundingBoxes, predBoundingBoxes):
+  \item \textbf{plotBoundingBoxes}(lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$), boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$)):
   \begin{enumerate}
     \item \textbf{Input:} The input LiDAR pointcloud alongside the ground truth and predicted bounding boxes for this scene. 
     \item \textbf{Method Description:} This method displays a 3D plot of the ground truth and predicted bounding boxes on the input LiDAR pointcloud to allow for visual inspection (using the plotting module).
@@ -311,7 +326,7 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 
 \newpage
 
-\section{MIS of Evaluation Module} \label{Module} 
+\section{MIS of Evaluation Module} \label{ModuleEval} 
 
 \subsection{Module}
 
@@ -320,8 +335,8 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 \subsection{Uses}
 \begin{itemize}
   \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
-  \item Model
-  \item Checkpoint
+  \item Model (\ref{ModuleModel})
+  \item Checkpoint (\ref{ModuleCkpt})
 \end{itemize}
 
 
@@ -340,7 +355,7 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
   \hline
   \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
   \hline
-  eval & PyTorch Dataloader (Eval), Model, Checkpoint (Optional) & Evaluation Metrics & - \\
+  eval & evalLoader (PyTorch Dataloader), model (Model Module), ckpt (Checkpoint Module) & metrics (Named Tuple of (str, $R$)) & - \\
   \hline
   \end{tabular}
 \end{center}
@@ -355,13 +370,11 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 
 \subsubsection{Assumptions}
 
-
-
 \subsubsection{Access Routine Semantics}
 \noindent eval():
 \begin{itemize}
 \item transition: N/A 
-\item output: This function will run the input model over the evaluation loader and collect the mAP statistics over this set of data. These statistics will then be returned as output. If a checkpoint is passed in, the model will first load the given checkpoint.
+\item output: This function will run the input model over the evaluation loader and collect the mAP statistics over this set of data. These statistics will then be returned as output. If a checkpoint is passed in, the model will first load the given checkpoint. Details of the mAP calculation can be seen in the SRS's IM4.
 \item exception: N/A
 \end{itemize}
 
@@ -370,16 +383,22 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 
 \newpage
 
-\section{MIS of Model Module} \label{Module} 
+\section{MIS of Logger Module} \label{ModuleLog} 
+This module is simply used to represent a wrapper around a global Tensorboard logger (\href{https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html}{PyTorch tutorial on using Tensorboard})
+that can be used in any module to log metrics to a logging file. It interacts with the file system environment variable and can be used to visualize logs after saving them.
+\newpage
+
+\section{MIS of Model Module} \label{ModuleModel} 
 
 \subsection{Module}
 
 \subsection{Uses}
 \begin{itemize}
   \item Is a subclass of PyTorch Module (\href{https://pytorch.org/docs/stable/generated/torch.nn.Module.html}{PyTorch Documentation})
-  \item Equivariant Layers
-  \item OpenPCDet Layers
-  \item Configuration
+  \item PyTorch Tensor (\href{https://pytorch.org/docs/stable/tensors.html}{PyTorch Documentation})
+  \item Equivariant Layers (\ref{ModuleEQ})
+  \item OpenPCDet Layers (\ref{ModulePCDet})
+  \item Configuration (\ref{ModuleCfg})
 \end{itemize}
 
 \subsection{Syntax}
@@ -389,13 +408,13 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-  \begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+  \begin{tabular}{p{2cm}|p{4cm}|p{4cm}|p{2cm}}
   \hline
   \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
   \hline
   init & - & - & - \\
   \hline
-  forward & Images, LiDAR & Predicted Bounding Boxes & - \\
+  forward & imgTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$), lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$) & boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$) & - \\
   \hline
   \end{tabular}
 \end{center}
@@ -404,8 +423,8 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 
 \subsubsection{State Variables}
 \begin{itemize}
-  \item pcdetLayers
-  \item eqLayers
+  \item pcdetLayers (OpenPCDet Layers Module)
+  \item eqLayers (Equivariant Layers Module)
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -433,7 +452,7 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 
 \newpage
 
-\section{MIS of Loss Module} \label{Module} 
+\section{MIS of Loss Module} \label{ModuleLoss} 
 
 \subsection{Module}
 
@@ -443,7 +462,8 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 
 \begin{itemize}
   \item Is a subclass of PyTorch Loss (\href{https://pytorch.org/docs/stable/nn.html#loss-functions}{PyTorch Documentation})
-  \item Configuration
+  \item PyTorch Tensor (\href{https://pytorch.org/docs/stable/tensors.html}{PyTorch Documentation})
+  \item Configuration (\ref{ModuleCfg})
 \end{itemize}
 
 \subsection{Syntax}
@@ -463,7 +483,7 @@ inference & Images, LiDAR, Bounding Boxes, Model, Checkpoint & - & - \\
 \hline
 init & - & - & - \\
 \hline
-forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss Value & - \\
+forward & boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$) & Loss Value (PyTorch Tensor $R$) & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -473,7 +493,7 @@ forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss Value & -
 \subsubsection{State Variables}
 
 \begin{itemize}
-  \item hyperparameters
+  \item hyperparameters (Sequence of $R$)
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -491,7 +511,7 @@ forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss Value & -
 \noindent forward():
 \begin{itemize}
 \item transition: N/A 
-\item output: This method will use the predicted and ground truth bounding boxes to regress and output a loss value.
+\item output: This method will use the predicted and ground truth bounding boxes to regress and output a loss value. Details of the loss function to be implemented can be seen in the SRS's IM2.
 \item exception: N/A
 \end{itemize}
 
@@ -499,7 +519,7 @@ forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss Value & -
 
 \newpage
 
-\section{MIS of Optimizer Module} \label{Module} 
+\section{MIS of Optimizer Module} \label{ModuleOptim} 
 
 \subsection{Module}
 
@@ -509,7 +529,7 @@ forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss Value & -
 \begin{itemize}
   \item Is a wrapper around the PyTorch ADAM Optimizer (\href{https://pytorch.org/docs/stable/optim.html}{PyTorch Documentation})
   \item PyTorch Parameter (\href{https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html}{PyTorch Documentation})
-  \item Configuration
+  \item Configuration (\ref{ModuleCfg})
 \end{itemize}
 
 \subsection{Syntax}
@@ -527,7 +547,7 @@ forward & Predicted Bounding Boxes, Ground Truth Bounding Boxes & Loss Value & -
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & Model Parameters & - & - \\
+init & modelParams (Sequence of PyTorch Parameter) & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -537,8 +557,8 @@ init & Model Parameters & - & - \\
 \subsubsection{State Variables}
 
 \begin{itemize}
-  \item hyperparameters
-  \item modelParameters
+  \item hyperparameters (Sequence of $R$)
+  \item modelParameters (Sequence of PyTorch Parameter)
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -552,7 +572,7 @@ init & Model Parameters & - & - \\
 \subsubsection{Access Routine Semantics}
 \noindent init():
 \begin{itemize}
-\item transition: This method will set the loss module's hyperparameters according to the optimizer-related configuration from the global configuration module. It will also save a reference to passed in model parameters in the modelParameters state variable.
+\item transition: This method will set the loss module's hyperparameters according to the optimizer-related configuration from the global configuration module. It will also save a reference to passed in model parameters in the modelParameters state variable. Details of the ADAM Optimizer can be seen in the SRS's IM3.
 \item output: N/A
 \item exception: N/A
 \end{itemize}
@@ -561,7 +581,7 @@ init & Model Parameters & - & - \\
 
 \newpage
 
-\section{MIS of Plotting Module} \label{Module} 
+\section{MIS of Plotting Module} \label{ModulePlot} 
 
 \subsection{Module}
 
@@ -572,6 +592,7 @@ init & Model Parameters & - & - \\
   \item Open3D Oriented Bounding Boxes (\href{https://www.open3d.org/docs/latest/python_api/open3d.geometry.OrientedBoundingBox.html}{Open3D Documentation})
   \item Open3D Pointclouds (\href{https://www.open3d.org/docs/release/python_api/open3d.geometry.PointCloud.html}{Open3D Documentation})
   \item Open3D in general (\href{https://www.open3d.org/docs/release/introduction.html}{Open3D Documentation})
+  \item PyTorch Tensor (\href{https://pytorch.org/docs/stable/tensors.html}{PyTorch Documentation})
 \end{itemize}
 
 \subsection{Syntax}
@@ -589,7 +610,7 @@ init & Model Parameters & - & - \\
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-plot & Ground Truth Bounding Boxes, Predicted Bounding Boxes, LiDAR & - & - \\
+plot & lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$), boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$) & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -620,7 +641,7 @@ plot & Ground Truth Bounding Boxes, Predicted Bounding Boxes, LiDAR & - & - \\
 
 \newpage
 
-\section{MIS of Checkpoint Module} \label{Module} 
+\section{MIS of Checkpoint Module} \label{ModuleCkpt} 
 
 \subsection{Module}
 
@@ -628,7 +649,7 @@ plot & Ground Truth Bounding Boxes, Predicted Bounding Boxes, LiDAR & - & - \\
 
 \subsection{Uses}
 \begin{itemize}
-  \item PyTorch Model (\href{https://pytorch.org/docs/stable/generated/torch.nn.Module.html}{PyTorch Documentation})
+  \item PyTorch Module (\href{https://pytorch.org/docs/stable/generated/torch.nn.Module.html}{PyTorch Documentation})
   \item PyTorch State Dictionary (\href{https://pytorch.org/tutorials/beginner/saving_loading_models.html}{PyTorch Documentation})
 \end{itemize}
 
@@ -647,9 +668,9 @@ plot & Ground Truth Bounding Boxes, Predicted Bounding Boxes, LiDAR & - & - \\
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-saveCheckpoint & Model, Checkpoint Path & - & - \\
+saveCheckpoint & model (PyTorch Module), CkptPath (str) & - & - \\
 \hline
-loadCheckpoint & Model, Checkpoint Path & - & - \\
+loadCheckpoint & model (PyTorch Module), CkptPath (str) & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -691,7 +712,7 @@ loadCheckpoint & Model, Checkpoint Path & - & - \\
 
 \newpage
 
-\section{MIS of Data Module} \label{Module} 
+\section{MIS of Data Module} \label{ModuleData} 
 
 \subsection{Module}
 
@@ -700,7 +721,7 @@ loadCheckpoint & Model, Checkpoint Path & - & - \\
 \subsection{Uses}
 \begin{enumerate}
   \item PyTorch Dataset and Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
-  \item Configuration
+  \item Configuration (\ref{ModuleCfg})
 \end{enumerate}
 
 \subsection{Syntax}
@@ -718,9 +739,9 @@ loadCheckpoint & Model, Checkpoint Path & - & - \\
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & isEval Boolean & - & - \\
+init & isEval (boolean) & - & - \\
 \hline
-getDataloader & - & PyTorch Dataloader & -  \\
+getDataloader & - & loader (PyTorch Dataloader) & -  \\
 \hline
 \end{tabular}
 \end{center}
@@ -729,7 +750,7 @@ getDataloader & - & PyTorch Dataloader & -  \\
 
 \subsubsection{State Variables}
 \begin{itemize}
-  \item dataset
+  \item dataset (PyTorch Dataset)
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -762,7 +783,7 @@ the training portion of the dataset will be loaded. If isEval is true, the evalu
 
 \newpage
 
-\section{MIS of Equivariant Layers Module} \label{Module} 
+\section{MIS of Equivariant Layers Module} \label{ModuleEQ} 
 
 This module is meant to represent the equivariant layers I will be adding into the OpenPCDet repository for the novel part
 of my project. To provide context for the reader, equivariant layers
@@ -813,7 +834,7 @@ forward & - & - & - \\
 
 \subsubsection{State Variables}
 \begin{itemize}
-  \item layerParameters
+  \item layerParameters (Sequence of PyTorch Parameter)
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -853,7 +874,7 @@ forward & - & - & - \\
 
 \newpage
 
-\section{MIS of OpenPCDet Layers Module} \label{Module} 
+\section{MIS of OpenPCDet Layers Module} \label{ModulePCDet} 
 This module is simply used to represent the existing layers in the OpenPCDet library (\cite{openpcdet2020}).
 Rather than highlight specific relevant layer types and modules, I would encourage the reader to read through the BEVFusion (\cite{liang2022bevfusion})
 configuration file (\href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{BEVFusion Config File}) and 
@@ -861,10 +882,11 @@ associated code sections (\href{https://github.com/open-mmlab/OpenPCDet/tree/mas
 
 \newpage
 
-\section{MIS of PyTorch Module} \label{Module} 
+\section{MIS of PyTorch Module} \label{ModuleTorch} 
 This module is simply used to represent the PyTorch library referenced in the other modules.
 The main list of components that are used from this library is as follows:
 \begin{itemize}
+  \item PyTorch Tensor (\href{https://pytorch.org/docs/stable/tensors.html}{PyTorch Documentation})
   \item PyTorch Module (\href{https://pytorch.org/docs/stable/generated/torch.nn.Module.html}{PyTorch Documentation})
   \item PyTorch Dataloader (\href{https://pytorch.org/tutorials/beginner/basics/data_tutorial.html}{PyTorch Documentation})
   \item PyTorch Optimizer (\href{https://pytorch.org/docs/stable/optim.html}{PyTorch Documentation})
@@ -875,7 +897,7 @@ The main list of components that are used from this library is as follows:
 
 \newpage
 
-\section{MIS of Config Module} \label{Module} 
+\section{MIS of Config Module} \label{ModuleCfg} 
 
 \subsection{Module}
 
@@ -897,7 +919,7 @@ The main list of components that are used from this library is as follows:
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm}|p{6cm}|p{4cm}|p{2cm}}
+\begin{tabular}{p{3cm}|p{5cm}|p{2cm}|p{2cm}}
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
@@ -919,10 +941,10 @@ getLossConfig & - & - & - \\
 \subsubsection{State Variables}
 
 \begin{itemize}
-  \item modelConfig
-  \item dataConfig 
-  \item optimConfig 
-  \item lossConfig
+  \item modelConfig (Sequence of $R$)
+  \item dataConfig (Sequence of $R$)
+  \item optimConfig (Sequence of $R$)
+  \item lossConfig (Sequence of $R$)
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -975,7 +997,7 @@ getLossConfig & - & - & - \\
 
 \newpage
 
-\section{MIS of Data Processing Module} \label{Module} 
+\section{MIS of Data Processing Module} \label{ModuleDataProc} 
 
 \subsection{Module}
 
@@ -983,7 +1005,7 @@ getLossConfig & - & - & - \\
 
 \subsection{Uses}
 \begin{itemize}
-  \item 
+  \item PyTorch Tensor (\href{https://pytorch.org/docs/stable/tensors.html}{PyTorch Documentation})
 \end{itemize}
 
 \subsection{Syntax}
@@ -997,11 +1019,11 @@ getLossConfig & - & - & - \\
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{2cm}|p{6cm}|p{2cm}|p{2cm}}
+\begin{tabular}{p{2cm}|p{5cm}|p{3cm}|p{2cm}}
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-process & Image Path, LiDAR Path & Images, LiDAR & - \\
+process & imgPath (str), lidarPath (str) & imgTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$), lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$) & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -1033,7 +1055,6 @@ process & Image Path, LiDAR Path & Images, LiDAR & - \\
 \subsubsection{Local Functions}
 
 
-\section{References}
 \newpage
 
 \bibliographystyle {plainnat}
@@ -1046,35 +1067,7 @@ process & Image Path, LiDAR Path & Images, LiDAR & - \\
 
 \section{Appendix} \label{Appendix}
 
-\wss{Extra information if required}
-
-\newpage{}
-
-\section*{Appendix --- Reflection}
-
-\wss{Not required for CAS 741 projects}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Problem Analysis and Design.
-
-\input{../../Reflection.tex}
-
-\begin{enumerate}
-  \item What went well while writing this deliverable? 
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item Which of your design decisions stemmed from speaking to your client(s)
-  or a proxy (e.g. your peers, stakeholders, potential users)? For those that
-  were not, why, and where did they come from?
-  \item While creating the design doc, what parts of your other documents (e.g.
-  requirements, hazard analysis, etc), it any, needed to be changed, and why?
-  \item What are the limitations of your solution?  Put another way, given
-  unlimited resources, what could you do to make the project better? (LO\_ProbSolutions)
-  \item Give a brief overview of other design solutions you considered.  What
-  are the benefits and tradeoffs of those other designs compared with the chosen
-  design?  From all the potential options, why did you select the documented design?
-  (LO\_Explores)
-\end{enumerate}
+May be added in the future.
 
 
 \end{document}
