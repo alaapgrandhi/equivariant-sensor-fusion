@@ -86,6 +86,9 @@
 \newcounter{lcnum} %Likely change number
 \newcommand{\lthelcnum}{LC\thelcnum}
 \newcommand{\lcref}[1]{LC\ref{#1}}
+\newcounter{rnnum} %Likely change number
+\newcommand{\lthernnum}{RN\thernnum}
+\newcommand{\rnref}[1]{RN\ref{#1}}
 \newcounter{ulcnum} %Likely change number
 \newcommand{\ltheulcnum}{ULC\theulcnum}
 \newcommand{\ulcref}[1]{ULC\ref{#1}}
@@ -185,6 +188,8 @@ draw=black, fill=white!30]
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 February 9, 2025 & 1.0 & Initial SRS draft/document.\\
+\midrule
+April 16, 2025 & 2.0 & Updated SRS according to comments.\\
 \bottomrule
 \end{tabularx}
 
@@ -224,27 +229,35 @@ their units. The symbols are listed in alphabetical order.
 \noindent \begin{longtable*}{l l p{12cm}} \toprule
 \textbf{symbol} & \textbf{unit} & \textbf{description}\\
 \midrule 
-$f_x$ & $\mathbb{R}_{\geq0}$ pixels & The focal length of the given camera in the x direction.
+$f_x$ & $\mathbb{R}_{\geq0}$ pixels & The focal length of the given camera in the $x$ direction.
 \\
-$f_y$ & $\mathbb{R}_{\geq0}$ pixels & The focal length of the given camera in the y direction.
+$f_y$ & $\mathbb{R}_{\geq0}$ pixels & The focal length of the given camera in the $y$ direction.
 \\
-$c_x$ & $\mathbb{R}$ pixels & The principal point of the given camera in the x direction.
+$c_x$ & $\mathbb{R}$ pixels & The principal point of the given camera in the $x$ direction.
 \\
-$c_y$ & $\mathbb{R}$ pixels & The principal point of the given camera in the y direction.
+$c_y$ & $\mathbb{R}$ pixels & The principal point of the given camera in the $y$ direction.
 \\
-$s$ & $\mathbb{R}$ pixels & The skew of the given camera representing how far from perpendicular the x and y directions are.
+$s$ & $\mathbb{R}$ pixels & The skew of the given camera representing how far from perpendicular the $x$ and $y$ directions are.
 \\
 $\mathbf{K}$ & $\mathbb{R}^{3\times3}$ pixels & The intrinsic matrix of the given camera representing how 3D points are projected onto the 2D image plane.
 \\
-$\mathbf{P_i}$ & $\mathbb{R}^{2\times{}n_p}$ pixels & The set of x,y coordinates for each of the $n_p$ pixels in a given image.
+$n_p$ & $\mathbb{R}_{\geq0}$ & The number of pixels in a given input image.
 \\
-$\mathbf{P_c}$ & $\mathbb{R}^{3\times{}n_p}$ m & The set of back-projected x,y,z coordinates for each of the $n_p$ pixels in a given image.
+$\mathbf{P_i}$ & $\mathbb{R}^{2\times{}n_p}$ pixels & The set of $x$,$y$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$\mathbf{P_c}$ & $\mathbb{R}^{3\times{}n_p}$ m & The set of back-projected $x$,$y$,$z$ coordinates for each of the $n_p$ pixels in a given image. This is just $X_{c}$, $Y_{c}$, and $Z_{c}$ concatenated.
+\\
+$\mathbf{X_c}$ & $\mathbb{R}^{n_p}$ m & The set of back-projected $x$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$\mathbf{Y_c}$ & $\mathbb{R}^{n_p}$ m & The set of back-projected $y$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$\mathbf{Z_c}$ & $\mathbb{R}^{n_p}$ m & The set of back-projected $z$ coordinates for each of the $n_p$ pixels in a given image.
 \\
 $D$ & $\mathbb{R}^{3}\rightarrow{}\mathbb{R}^{3}$ & The distortion model of the given camera (accounts for lens effects).
 \\
-$\mathbf{P_w}$ & $\mathbb{R}^{3\times{}n_p}$ m & The set of back-projected, world reference frame x,y,z coordinates for each of the $n_p$ pixels in a given image.
+$\mathbf{P_w}$ & $\mathbb{R}^{3\times{}n_p}$ m & The set of back-projected, world reference frame $x$,$y$,$z$ coordinates for each of the $n_p$ pixels in a given image.
 \\
-$\mathbf{T_{c,w}}$ & $\mathbb{R}^{4\times{}4}$ & The extrinsics matrix that maps x,y,z points from the given camera's frame of reference to the world reference frame.
+$\mathbf{T_{c,w}}$ & $\mathbb{R}^{4\times{}4}$ & The extrinsics matrix that maps $x$,$y$,$z$ points from the given camera's frame of reference to the world reference frame.
 \\ 
 $\mathbf{R_{c,w}}$ & $\mathbb{R}^{3\times3}$ & The rotation matrix between the given camera's frame of reference and the world reference frame.
 \\
@@ -256,15 +269,25 @@ $\alpha_{gd}$ & $\mathbb{R}$ & A hyperparameter for gradient descent that contro
 \\
 $L$ & $\mathbb{R}^{n_\theta}\rightarrow\mathbb{R}$ & A loss function that maps the parameters of a model to a single estimated loss value.
 \\
+$n_{\theta}$ & $\mathbb{R}_{\geq0}$ & The number of learnable parameters for a given model.
+\\
 $\mathbf{\theta}$ & $\mathbb{R}^{n_\theta}$ & The learnable parameters for a given model, where the number of parameters is $n_\theta$.
 \\
-$TP$ & $\mathbb{N}_{0}$ & The number of true positives for a given classification task. That is, the number of positive predictions that corresponded to positive ground truth.
+$\mathit{TP}$ & $\mathbb{N}_{0}$ & The number of true positives for a given classification task. That is, the number of positive predictions that corresponded to positive ground truth.
 \\
-$FP$ & $\mathbb{N}_{0}$ & The number of false positives for a given classification task. That is, the number of positive predictions that corresponded to a negative ground truth.
+$\mathit{FP}$ & $\mathbb{N}_{0}$ & The number of false positives for a given classification task. That is, the number of positive predictions that corresponded to a negative ground truth.
 \\
-$FN$ & $\mathbb{N}_{0}$ & The number of false negatives for a given classification task. That is, the number of positive ground truths that were not predicted to be positive.
+$\mathit{FN}$ & $\mathbb{N}_{0}$ & The number of false negatives for a given classification task. That is, the number of positive ground truths that were not predicted to be positive.
 \\
 $\mathbf{d_{c}}$ & $\mathbb{R}^{n_p}$ m & The estimated depth values for each of the pixels in a given image.
+\\
+$g$ & $\mathbb{R}_{\geq0}$ & The number of scalar values/parameters used to define a bounding box (dataset-dependent). For the nuScenes dataset, this is 10 corresponding to the 3D center position, height, width, length, and a quaternion angle representation. 
+\\
+$n_{b}$ & $\mathbb{R}_{\geq0}$ & The number of ground truth bounding boxes. 
+\\
+$n_{\hat{b}}$ & $\mathbb{R}_{\geq0}$ & The number of predicted bounding boxes. 
+\\
+$n_{c}$ & $\mathbb{R}_{\geq0}$ & The number of object classes (typically 3 corresponding to cars, pedestrians, and cyclists). 
 \\
 $\mathbf{B}$ & $\mathbb{R}^{g\times{}n_b}$ & The set of ground-truth bounding box attributes (i.e. center, height, width, etc.), where there are $n_b$ ground truth bounding boxes.
 \\
@@ -286,15 +309,16 @@ $\beta_2$ & $\mathbb{R}$ & A hyperparameter for changing the inertia of the seco
 \\
 $\tau_{IoU}$ & $\mathbb{R}$ & An IoU threshold that is used to determine whether a predicted and a ground truth bounding box sufficiently overlap to be considered paired.
 \\
+$h$ & $\mathbb{R}_{\geq0}$ & The height of a given input image. 
+\\
+$w$ & $\mathbb{R}_{\geq0}$ & The width of a given input image. 
+\\
+$n_{l}$ & $\mathbb{R}_{\geq0}$ & The number of points in an input lidar pointcloud. 
+\\
 $\mathcal{I}$ & $\mathbb{R}^{h\times{}w}$ & An input image with height $h$ and width $w$.
 \\
 $\mathcal{P}$ & $\mathbb{R}^{3\times{}n_l}$ & An input lidar pointcloud with $n_l$ points.
 \\
-$A_C$ & \si[per-mode=symbol] {\square\metre} & coil surface area
-\\
-$A_\text{in}$ & \si[per-mode=symbol] {\square\metre} & surface area over 
-which heat is transferred in
-\\ 
 \bottomrule
 \end{longtable*}
 
@@ -326,7 +350,7 @@ A list of the typographic conventions used for mathematical notation is provided
   \item Matrices are represented as bold uppercase letters, while vectors are represented as bold lowercase letters
   \item Scalars are unbolded and can be in either uppercase or lowercase
   \item A hat is used to denote a variable that is an estimator for another variable (i.e. $\hat{B}$ is an estimator for $B$).
-  \item The matrix product is represented by placing two matrices adjacent to each other ($AB$), while the hadamard product is represented by placing a circle between the two matrices ($A\circ{}B$)
+  \item The matrix product is represented by placing two matrices adjacent to each other ($AB$), while the Hadamard product is represented by placing a circle between the two matrices ($A\circ{}B$)
   \item Matrices and vectors are indexed using square brackets and subscripts are only used for the clarification of symbols. 
 \end{itemize}
 
@@ -360,8 +384,10 @@ documents and for the design of the final solution.
 \subsection{Scope of Requirements} 
 
 This project is scoped to only consider scenarios where both images from multiple camera views (not just one)
-and a pointcloud from LiDAR are available at all points in time. While solutions should be robust
-to noise in either sensor, none of the sensors will completely cut out at any point in time.
+and a pointcloud from LiDAR are available at all points in time. While I have previously stated that solutions should 
+be robust to noise and disturbances in either sensor modality, it is assumed that neither sensor will completely cut out 
+at any point in time. That is to say that it is assumed that both forms of input will always be inserted into the model 
+in the expected format, even if one of those inputs is highly corrupted or full of zeros. 
 The problem is also constrained to one where model training and inference happen on different random subsets
 of the same dataset. The effects of changing domain (driving in Canada vs driving in Europe) are out of scope.
 
@@ -544,11 +570,11 @@ or first year graduate course (specialized to the topic).
 \subsection{System Constraints}
 
 \noindent \begin{itemize}
-\item[C\refstepcounter{consnum}\theconsnum\label{C1}:] The chosen solution shall be designed as a learned model inside the OpenPCDet framework \cite{openpcdet2020}. 
+\item[C\refstepcounter{consnum}\theconsnum\label{C1}:] The chosen solution shall be designed as a learned model inside the OpenPCDet framework \cite{openpcdet2020}. Rationale provided in \rnref{RN:Learn}.
 
-\item[C\refstepcounter{consnum}\theconsnum\label{C2}:] The chosen solution shall be trained on either the NuScenes \cite{caesar2020nuscenes} or the Waymo \cite{sun2020scalability} Dataset.
+\item[C\refstepcounter{consnum}\theconsnum\label{C2}:] The chosen solution shall be trained on either the NuScenes \cite{caesar2020nuscenes} or the Waymo \cite{sun2020scalability} Dataset. Rationale provided in \rnref{RN:Dataset}.
 
-\item[C\refstepcounter{consnum}\theconsnum\label{C3}:] The chosen learned solution shall be optimized using the ADAM Optimizer.
+\item[C\refstepcounter{consnum}\theconsnum\label{C3}:] The chosen learned solution shall be optimized using the ADAM Optimizer. This in turn also means that optimization will be done using gradient-descent as ADAM is a gradient-descent algorithm. This refines the first constraint above to require that the model is differentiable. Rationale provided in \rnref{RN:Optim}.
 \end{itemize}
   
  
@@ -582,7 +608,7 @@ easier to correctly understand the requirements:
 \item \textbf{Bounding Box}: A 2D or 3D box that completely encompasses some given object as compactly as possible.
 \item \textbf{Multiview Camera Images}: Camera images taken from multiple different viewing angles in close proximity, all concatenated together.
 \item \textbf{Pinhole Camera Model}: A simple model for describing how 3D points map to 2D points in the image plane.
-\item \textbf{Reference Frame}: An abstract coordinate system with its own origin and base x, y, z vectors.
+\item \textbf{Reference Frame}: An abstract coordinate system with its own origin and base $x$, $y$, $z$ vectors.
 \item \textbf{Classification}: A task that involves assigning one label from a discrete set of labels to a given input.
 \item \textbf{Regression}: A task that involves predicting a continuous value for a given input.
 \item \textbf{Loss}: A term used to describe how poorly a system performs for some set of input, given some known ground truth.
@@ -642,9 +668,9 @@ the output of the system.
 camera images with paired LiDAR pointclouds and ground-truth bounding boxes, output a model that is trained
 to minimize the chosen error function on the input dataset.
 
-\item[GS\refstepcounter{goalnum}\thegoalnum \label{goal:inference}:] Given multi-view camera images and a 
-corresponding LiDAR pointcloud from an autonomous vehicle, output the set of bounding boxes for dynamic entities
-in its surroundings.
+\item[GS\refstepcounter{goalnum}\thegoalnum \label{goal:inference}:] Given multi-view camera images, a 
+corresponding LiDAR pointcloud from an autonomous vehicle, and the trained model from GS2, output the set of bounding boxes for dynamic entities
+in the autonomous vehicle's surroundings.
 
 \end{itemize}
 
@@ -672,21 +698,22 @@ This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical system.
 The numbers given in the square brackets refer to the theoretical model [TM],
 general definition [GD], data definition [DD], instance model [IM], or likely
-change [LC], in which the respective assumption is used.
+change [LC], in which the respective assumption is used. The rationale for these
+assumptions is provided in \rnref{RN:Assump}.
 
 \begin{itemize}
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{assump:distortion}] The camera images
 passed into the system are assumed to all be undistorted. That is to say that the camera images
-are all assumed to follow the pinhole camera model.
+are all assumed to follow the pinhole camera model. Used in \dref{GD:AP}.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{assump:skew}] All the cameras aboard the
-autonomous vehicle are assumed to have near-perfectly perpendicular x and y axes. Thus, the skew parameter
-in the camera intrinsic matrix is assumed to be negligible. 
+autonomous vehicle are assumed to have near-perfectly perpendicular $x$ and $y$ axes. Thus, the skew parameter
+in the camera intrinsic matrix is assumed to be negligible. Used in \dref{GD:Intrin} and \lcref{LC:Skew}.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{assump:avgprec}] The numerical integral of the precision over
 a finite set of equally-spaced recall values is assumed to be close enough to the actual average precision value given 
-that the set of recall values is sufficiently large. 
+that the set of recall values is sufficiently large. Used in \dref{GD:AP}.
 
 
 \end{itemize}
@@ -707,17 +734,17 @@ on.
 {3D Position to 2D Pixel Mapping}
 % #4 equation
 {
-  $\begin{bmatrix}\mathbf{P_i} \\ 1\end{bmatrix}=D(K\begin{bmatrix}\mathbf{P_c^*}\end{bmatrix})$, 
+  $\begin{bmatrix}\mathbf{P_i} \\ 1\end{bmatrix}=D(\mathbf{K}\begin{bmatrix}\mathbf{P_c^*}\end{bmatrix})$, 
   $\mathbf{K}=\begin{bmatrix}
     f_x & s & c_x \\
     0 & f_y & c_y \\
     0 & 0 & 1
   \end{bmatrix}$,
-  $\mathbf{P_c^*}=\begin{bmatrix}\frac{X_c}{Z_c} \\ \frac{Y_c}{Z_c} \\ 1\end{bmatrix}$
+  $\mathbf{P_c^*}\triangleq{}\begin{bmatrix}\frac{X_c}{Z_c} \\ \frac{Y_c}{Z_c} \\ 1\end{bmatrix}$
 }
 % #5 description
 {
-  The above equation describes how a 3D location in the camera's reference frame $\mathbf{P_c}$
+  The above equation describes how a 3D location $\mathbf{P_c}$ in the camera's reference frame 
   is mapped to a 2D location in the camera's image plane $\mathbf{P_i}$. It also shows how the
   camera's intrinsic matrix $\mathbf{K}$ used in this equation is constructed from the camera's focal 
   lengths $f_x$ and $f_y$, the camera's skew parameter $s$, and the camera's principal points $c_x$ and $c_y$. The outer 
@@ -756,7 +783,7 @@ on.
 }
 % #5 description
 {
-  The above equation gives the general relation between a point's coordinates in some original frame $\mathbf{P_c}$ and its coordinates in some other reference frame $\mathbf{P_w}$.
+  The above equation gives the general relation between a point's coordinates $\mathbf{P_c}$ in some original frame and its coordinates $\mathbf{P_w}$ in some other reference frame.
   It also shows how the extrinsics matrix $\mathbf{T_{c,w}}$ can be decomposed into a rotation $\mathbf{R_{c,w}}$ and a translation $\mathbf{t_{c,w}}$ between the two reference frames. 
 }
 % #6 Notes
@@ -857,7 +884,7 @@ on.
 }
 % #5 description
 {
-  Given two shapes in n-dimensional space $A$ and $B$, the intersection over union metric ($\mathbb{R}_{\geq0}$) provides a measure of their similarity.
+  Given two shapes in $n$-dimensional space $A$ and $B$, the intersection over union metric ($\mathbb{R}_{\geq0}$) provides a measure of their similarity.
   It tells us how much these two shapes overlap and thus it can indicate how well of an estimation one is for the other.
 }
 % #6 Notes
@@ -957,7 +984,7 @@ on.
 {
   Average Precision $AP$ ($\mathbb{R}_{\geq0}$) is a performance metric that is used in prediction tasks to capture both recall and 
   precision into a single metric. In the above formula, the symbol $x$ is simply used to capture
-  the set of controllable parameters that influence both recall and precision.
+  the vector of controllable parameters (each in $R$) that influence both recall and precision.
   
   A high average precision score indicates that a system can predict most actual 
   occurrences without many false predictions. In its purest form, it represents the area under a curve formed by
@@ -1090,7 +1117,7 @@ identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}.
   \hline
   Description&By combining \tref{TM:Extrin} and \dref{GD:Intrin}, we can get the following equation: \\
   &$\begin{bmatrix}\mathbf{P_w}\\1\end{bmatrix}=\mathbf{T_{c,w}}\begin{bmatrix}\mathbf{K} & 0 \\ 0 & 1\end{bmatrix}^{-1}\begin{bmatrix}\begin{bmatrix}\mathbf{P_i}\\1\end{bmatrix}\circ{}\mathbf{d_c} \\ 1\end{bmatrix}$ \\
-  &$\mathbf{P_w}$ represents a matrix of 3D points back-projected from the set of 2D pixel coordinates $\mathbf{P_i}$ and their corresponding depth estimates $\mathbf{d_c}$. Note that multiplying by the depth estimates here is the inverse operation to dividing by z when going from 3D to 2D (as seen in \dref{GD:Intrin}).\\
+  &$\mathbf{P_w}$ represents a matrix of 3D points back-projected from the set of 2D pixel coordinates $\mathbf{P_i}$ and their corresponding depth estimates $\mathbf{d_c}$. Note that multiplying by the depth estimates here is the inverse operation to dividing by $z$ when going from 3D to 2D (as seen in \dref{GD:Intrin}).\\
   &This allows for 2D camera features to then be projected to 3D locations so that they can be merged with LiDAR. \\ 
   \hline
   Sources& N/A\\
@@ -1196,7 +1223,7 @@ identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}.
   &$FP(\mathbf{\hat{B}^{c}},\mathbf{B^{c}})=\sum_{k=0}^{n_{\hat{b}}-1}(1-\max_{i}1((\text{IoU}(\mathbf{\hat{B}^c}[,k],\mathbf{B^c}[,i]))\geq\tau_{IoU}))=n_{\hat{b}}-TP$\\
   &$FN(\mathbf{\hat{B}^{c}},\mathbf{B^{c}})=\sum_{k=0}^{n_{b}-1}(1-\max_{i}1((\text{IoU}(\mathbf{B^c}[,k],\mathbf{\hat{B}^c}[,i]))\geq\tau_{IoU}))$\\
   &Using these values, the average precision values for each class can be calculate as described in \dref{GD:AP}. The final $mAP$ metric is then calculated by averaging these as follows:\\
-  &$mAP(\mathbf{\hat{B}}, \mathbf{B}, \mathbf{\hat{c}}, \mathbf{c})=\sum_{c}\frac{AP(\mathbf{\hat{B}^{c}},\mathbf{B^{c}})}{|c|}$\\
+  &$\text{mAP}(\mathbf{\hat{B}}, \mathbf{B}, \mathbf{\hat{c}}, \mathbf{c})=\sum_{c}\frac{AP(\mathbf{\hat{B}^{c}},\mathbf{B^{c}})}{|c|}$\\
   \hline
   Sources&\cite{openpcdet2020}\\
   \hline
@@ -1321,13 +1348,13 @@ them on the LiDAR pointcloud that was inputted in.
 
 This section provides rationales for the system constraints and assumptions as follows:
 \begin{itemize}
-  \item \textbf{Rationale for \cref{C1}}: For this project, I decided to focus on learned methods specifically because I have seen learned methods for this task often presented at scientific conferences. 
+  \item[RN\refstepcounter{rnnum}\thernnum\label{RN:Learn}:] \textbf{Rationale for \cref{C1}}: For this project, I decided to focus on learned methods specifically because I have seen learned methods for this task often presented at scientific conferences. 
   Additionally, my main area of focus is in deep learning for computer vision, so I also chose this constraint to match my interests. With this in mind, OpenPCDet \cite{openpcdet2020} simplifies the process of setting up datasets and 
   building models as it has much of the foundational code fully setup so its use was a logical constraint to make the problem more tractable in the 3 months of the term. It also provides implementations and benchmark
   values for reference methods like BEVFusion \cite{liang2022bevfusion}, so it simplifies evaluation and verification of \nfrref{NFR:Accuracy} as well.
-  \item \textbf{Rationale for \cref{C2}}: Reference methods for this task are often evaluated on these benchmark datasets so enforcing their use simplifies the evaluation of \nfrref{NFR:Accuracy}.
-  \item \textbf{Rationale for \cref{C3}}: Reference methods for this task are almost always trained with the ADAM optimizer, so allowing the use of other optimizers would simply add more complexity and ambiguity to the results obtained.
-  \item \textbf{Rationale for \aref{assump:distortion}, \aref{assump:skew}, \aref{assump:avgprec}}: These assumptions are commonly made in open-source libraries like OpenPCDet \cite{openpcdet2020}, so it makes sense to have them for this project as well.
+  \item[RN\refstepcounter{rnnum}\thernnum\label{RN:Dataset}:] \textbf{Rationale for \cref{C2}}: Reference methods for this task are often evaluated on these benchmark datasets so enforcing their use simplifies the evaluation of \nfrref{NFR:Accuracy}.
+  \item[RN\refstepcounter{rnnum}\thernnum\label{RN:Optim}:] \textbf{Rationale for \cref{C3}}: Reference methods for this task are almost always trained with the ADAM optimizer, so allowing the use of other optimizers would simply add more complexity and ambiguity to the results obtained.
+  \item[RN\refstepcounter{rnnum}\thernnum\label{RN:Assump}:] \textbf{Rationale for \aref{assump:distortion}, \aref{assump:skew}, \aref{assump:avgprec}}: These assumptions are commonly made in open-source libraries like OpenPCDet \cite{openpcdet2020}, so it makes sense to have them for this project as well.
 \end{itemize}
 
 \section{Likely Changes}    
