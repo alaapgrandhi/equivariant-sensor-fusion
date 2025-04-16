@@ -23,14 +23,13 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 Jan. 21 & Alaap & Initial Commit\\
+\midrule
+Apr. 16 & Alaap & Updated to incorporate feedback \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
-
-\wss{You can change the section headings, as long as you include the required
-information.}
 
 Over the past few years, we have seen more and more autonomous vehicles being allowed onto the road. 
 With this increase, the need for perception methods that can effectively use readings from sensor 
@@ -61,13 +60,20 @@ driving. Thus, it could serve as a basis for future research in the field by aca
 Industrial stakeholders for this task would primarily include companies like Waabi, Waymo and Tesla that produce
 autonomous vehicles. 
 
+\subsubsection{Other Stakeholders}
+Aside from the downstream users of this software, the ARCO lab (the lab I am a part of) and my research supervisor (Dr. Matthew Giamou) would also be stakeholders for this project.
+I am aiming to turn my work into a conference paper sometime over the summer and I plan on putting his name on the paper as well.
+As such, this research will hopefully expand the reach of the ARCO lab as a whole.  
+
 \subsection{Environment}
 \subsubsection{Software}
-The software should be compatible with any up-to-date operating system.
+The software should be compatible with any up-to-date Linux operating system. At present, I am not planning to support 
+all operating systems as the library that I am building my code on top of (OpenPCDet) is not compatible with all operating systems.
+
 
 \subsubsection{Hardware}
 Given that the solution space will revolve around learned methods, any computer possessing a machine-learning capable
-GPU with at least 8GB vram will be suitable for training and inference of models. However, this vram requirement would
+GPU with at least 12GB vram will be suitable for training and inference of models. However, this vram requirement would
 be significantly lower for inference-only settings using pre-trained models.
 
 \section{Goals}
@@ -76,11 +82,12 @@ be significantly lower for inference-only settings using pre-trained models.
     given point in time, determine the set of bounding boxes for dynamic entities in its surroundings $\{B_i\}$ 
     \item Given a common standard training dataset (i.e. Waymo, NuScenes, Kitti), the trained model should achieve comparable 
     accuracy (mAP) to existing state-of-the-art methods
-    \item In the presence of disturbances in one of the two given modalities, the trained model should achieve comparable 
-    accuracy (mAP) to a network solely trained on and processing the undisturbed modality.
+    
 \end{enumerate}
 \section{Stretch Goals}
 \begin{enumerate}
+    \item In the presence of disturbances in one of the two given modalities, the trained model should achieve comparable 
+    accuracy (mAP) to a network solely trained on and processing the undisturbed modality.
     \item Given a set of disturbed camera images $\{C_{d,i}\}$ and a disturbed lidar pointcloud $P_d$, achieve 
     better accuracy (mAP) than a network solely trained on either modality.
     \item Produce a range of architectures that can each meet the aforementioned requirements and thus be chosen from based
