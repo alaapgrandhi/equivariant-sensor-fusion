@@ -465,6 +465,15 @@ or Masters Supervisor (Dr. Matthew Giamou) and have them perform the following s
 If they are able to perform all these steps without errors (or with minimal errors that a researcher in the field would be able to troubleshoot),
 then I would consider this test to have passed. Otherwise, the steps that fail would provide insight into how the installability of the software could be improved.
 
+\subsubsection{Tests for Performance}
+
+\paragraph{Performance Testing}
+
+Since the amount of time inference and training runs take to execute are highly dependant on factors such as GPU, ram, hyperparameter, and background-processes.
+As such, rather than try to compare runtimes between different methods or compare to existing papers (which run on much more powerful setups with 4 to 8 GPUs), I aim
+to simply print the amount of time the model takes to for each training batch and each inference batch. With this information, I plan on having a discussion with my Masters' 
+Supervisor (Dr. Matthew Giamou) to discuss if the results seem reasonable.
+
 \subsection{Traceability Between Test Cases and Requirements}
 
 \begin{table}[h!]
@@ -484,6 +493,8 @@ then I would consider this test to have passed. Otherwise, the steps that fail w
   \caption{Traceability Matrix Showing the Connections Between Requirements and Tests}
   \label{Table:R_trace}
   \end{table}
+
+\newpage
 
 \section{Unit Test Description}
 
