@@ -57,6 +57,7 @@ urlcolor=cyan          % color of external links
 \midrule
 Mar 21 & 1.0 & First Draft\\
 Mar 22 & 1.1 & Added units/type\\
+Apr 17 & 2.0 & Incorporated Professor Smith's feedback \\
 \bottomrule
 \end{tabularx}
 
@@ -64,7 +65,111 @@ Mar 22 & 1.1 & Added units/type\\
 
 \section{Symbols, Abbreviations and Acronyms}
 
-See SRS Documentation at \url{https://github.com/alaapgrandhi/equivariant-sensor-fusion/tree/main/docs/SRS}
+See \href{https://github.com/alaapgrandhi/equivariant-sensor-fusion/tree/main/docs/SRS}{SRS Documentation} 
+
+\subsection{Table of Symbols}
+
+The following table of symbols is copied over from the SRS document to clarify symbols used in this document. Not all symbols in here show up in this document but they are put here nonetheless for consistency with the SRS.
+
+\renewcommand{\arraystretch}{1.2}
+%\noindent \begin{tabularx}{1.0\textwidth}{l l X}
+\noindent \begin{longtable*}{l l p{12cm}} \toprule
+\textbf{symbol} & \textbf{unit} & \textbf{description}\\
+\midrule 
+$f_x$ & $\mathbb{R}_{\geq0}$ pixels & The focal length of the given camera in the $x$ direction.
+\\
+$f_y$ & $\mathbb{R}_{\geq0}$ pixels & The focal length of the given camera in the $y$ direction.
+\\
+$c_x$ & $\mathbb{R}$ pixels & The principal point of the given camera in the $x$ direction.
+\\
+$c_y$ & $\mathbb{R}$ pixels & The principal point of the given camera in the $y$ direction.
+\\
+$s$ & $\mathbb{R}$ pixels & The skew of the given camera representing how far from perpendicular the $x$ and $y$ directions are.
+\\
+$\mathbf{K}$ & $\mathbb{R}^{3\times3}$ pixels & The intrinsic matrix of the given camera representing how 3D points are projected onto the 2D image plane.
+\\
+$n_p$ & $\mathbb{R}_{\geq0}$ & The number of pixels in a given input image.
+\\
+$\mathbf{P_i}$ & $\mathbb{R}^{2\times{}n_p}$ pixels & The set of $x$,$y$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$\mathbf{P_c}$ & $\mathbb{R}^{3\times{}n_p}$ m & The set of back-projected $x$,$y$,$z$ coordinates for each of the $n_p$ pixels in a given image. This is just $X_{c}$, $Y_{c}$, and $Z_{c}$ concatenated.
+\\
+$\mathbf{X_c}$ & $\mathbb{R}^{n_p}$ m & The set of back-projected $x$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$\mathbf{Y_c}$ & $\mathbb{R}^{n_p}$ m & The set of back-projected $y$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$\mathbf{Z_c}$ & $\mathbb{R}^{n_p}$ m & The set of back-projected $z$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$D$ & $\mathbb{R}^{3}\rightarrow{}\mathbb{R}^{3}$ & The distortion model of the given camera (accounts for lens effects).
+\\
+$\mathbf{P_w}$ & $\mathbb{R}^{3\times{}n_p}$ m & The set of back-projected, world reference frame $x$,$y$,$z$ coordinates for each of the $n_p$ pixels in a given image.
+\\
+$\mathbf{T_{c,w}}$ & $\mathbb{R}^{4\times{}4}$ & The extrinsics matrix that maps $x$,$y$,$z$ points from the given camera's frame of reference to the world reference frame.
+\\ 
+$\mathbf{R_{c,w}}$ & $\mathbb{R}^{3\times3}$ & The rotation matrix between the given camera's frame of reference and the world reference frame.
+\\
+$\mathbf{t_{c,w}}$ & $\mathbb{R}^{3}$ & The translation vector between the given camera's frame of reference and the world reference frame.
+\\
+$\mathbb{P}$ & $\mathbb{R}^{n_c}$ & A predicted probability distribution over the set of $n_c$ discrete classes.
+\\
+$\alpha_{gd}$ & $\mathbb{R}$ & A hyperparameter for gradient descent that controls how large each gradient update is.
+\\
+$L$ & $\mathbb{R}^{n_\theta}\rightarrow\mathbb{R}$ & A loss function that maps the parameters of a model to a single estimated loss value.
+\\
+$n_{\theta}$ & $\mathbb{R}_{\geq0}$ & The number of learnable parameters for a given model.
+\\
+$\mathbf{\theta}$ & $\mathbb{R}^{n_\theta}$ & The learnable parameters for a given model, where the number of parameters is $n_\theta$.
+\\
+$\mathit{TP}$ & $\mathbb{N}_{0}$ & The number of true positives for a given classification task. That is, the number of positive predictions that corresponded to positive ground truth.
+\\
+$\mathit{FP}$ & $\mathbb{N}_{0}$ & The number of false positives for a given classification task. That is, the number of positive predictions that corresponded to a negative ground truth.
+\\
+$\mathit{FN}$ & $\mathbb{N}_{0}$ & The number of false negatives for a given classification task. That is, the number of positive ground truths that were not predicted to be positive.
+\\
+$\mathbf{d_{c}}$ & $\mathbb{R}^{n_p}$ m & The estimated depth values for each of the pixels in a given image.
+\\
+$g$ & $\mathbb{R}_{\geq0}$ & The number of scalar values/parameters used to define a bounding box (dataset-dependent). For the nuScenes dataset, this is 10 corresponding to the 3D center position, height, width, length, and a quaternion angle representation. 
+\\
+$n_{b}$ & $\mathbb{R}_{\geq0}$ & The number of ground truth bounding boxes. 
+\\
+$n_{\hat{b}}$ & $\mathbb{R}_{\geq0}$ & The number of predicted bounding boxes. 
+\\
+$n_{c}$ & $\mathbb{R}_{\geq0}$ & The number of object classes (typically 3 corresponding to cars, pedestrians, and cyclists). 
+\\
+$\mathbf{B}$ & $\mathbb{R}^{g\times{}n_b}$ & The set of ground-truth bounding box attributes (i.e. center, height, width, etc.), where there are $n_b$ ground truth bounding boxes.
+\\
+$\mathbf{\hat{B}}$ & $\mathbb{R}^{g\times{}n_{\hat{b}}}$ & The set of predicted bounding box attributes, where there are $n_{\hat{b}}$ predicted bounding boxes.
+\\
+$\mathbf{\hat{C}_{\text{dist}}}$ & $\mathbb{R}^{n_c\times{}n_{\hat{b}}}$ & The set of predicted bounding box class probability distributions.
+\\
+$\mathbf{\hat{c}}$ & $\mathbb{N}_{0}^{n_{\hat{b}}}$ & The set of predicted bounding box classes.
+\\
+$\mathbf{c}$ & $\mathbb{N}_{0}^{n_b}$ & The set of ground truth bounding box classes.
+\\
+$\alpha_{fl}$ & $\mathbb{R}$ & A hyperparameter for controlling the influence of the focal loss term.
+\\
+$\gamma$ & $\mathbb{R}$ & A hyperparameter for controlling the effect of easy examples on the focal loss. In practice, this is class specific and is set to the inverse class frequency.
+\\
+$\beta_1$ & $\mathbb{R}$ & A hyperparameter for changing the inertia of the first moment in ADAM.
+\\
+$\beta_2$ & $\mathbb{R}$ & A hyperparameter for changing the inertia of the second moment in ADAM.
+\\
+$\tau_{IoU}$ & $\mathbb{R}$ & An IoU threshold that is used to determine whether a predicted and a ground truth bounding box sufficiently overlap to be considered paired.
+\\
+$h$ & $\mathbb{R}_{\geq0}$ & The height of a given input image. 
+\\
+$w$ & $\mathbb{R}_{\geq0}$ & The width of a given input image. 
+\\
+$n_{l}$ & $\mathbb{R}_{\geq0}$ & The number of points in an input lidar pointcloud. 
+\\
+$\mathcal{I}$ & $\mathbb{R}^{h\times{}w}$ & An input image with height $h$ and width $w$.
+\\
+$\mathcal{P}$ & $\mathbb{R}^{3\times{}n_l}$ & An input lidar pointcloud with $n_l$ points.
+\\
+$n_{cams}$ & $\mathbb{R}$ & The number of cameras on the autonomous vehicle (and thus the number of images in each multi-view image).
+\\
+\bottomrule
+\end{longtable*}
 
 \newpage
 
@@ -184,7 +289,7 @@ The following table is taken directly from the Module Guide document for this pr
 \subsubsection{Exported Constants}
 
 \begin{itemize}
-  \item NUM\_EPOCHS: The number of epochs to train for.
+  \item NUM\_EPOCHS ($R$): The number of epochs to train for. For now, this constant equals 30, but this may be refined in future versions.
 \end{itemize}
 
 \subsubsection{Exported Access Programs}
@@ -194,7 +299,11 @@ The following table is taken directly from the Module Guide document for this pr
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
+setup & - & - & - \\
+\hline
 train & - & - & - \\
+\hline
+eval & - & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -205,9 +314,9 @@ train & - & - & - \\
 \begin{itemize}
   \item evalLoader (PyTorch Dataloader)
   \item trainLoader (PyTorch Dataloader)
-  \item optim (Optimizer Module)
-  \item model (Model Module)
-  \item loss (Loss Module)
+  \item optim (Optimizer ADT)
+  \item model (Model ADT)
+  \item loss (Loss ADT)
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -218,32 +327,25 @@ train & - & - & - \\
 
 \subsubsection{Access Routine Semantics}
 
-
-\noindent train():
+\noindent setup():
 \begin{itemize}
-\item transition: Creates the evaluation dataloader, training dataloader, optimizer, model, and loss modules by calling their respective constructors (Data Module's constructor for the dataloaders). References to these are then stored in the corresponding state variables. Once this is done, trainEpoch and evalModel can be called in a loop for a set number of epochs (NUM\_EPOCHS).
+\item transition: Creates the optim, model, and loss abstract objects by calling their respective constructors (For the Optimizer \ref{ModuleOptim}, Model \ref{ModuleModel}, and Loss \ref{ModuleLoss} Modules respectively). The trainLoader abstract object is created by calling the Data module's \ref{ModuleData} constructor with isEval set to False and then calling the getDataloader access program. The same process is followed for the evalLoader, but with isEval set to True. References to these are then stored in the corresponding state variables.
 \item output: N/A
 \item exception: N/A
 \end{itemize}
 
-\subsubsection{Local Functions}
+\noindent train():
+\begin{itemize}
+\item transition: The model is trained on the trainLoader's data for NUM\_EPOCHS epochs using the ADAM optimizer described \href{https://arxiv.org/abs/1412.6980}{here}. In this process, the evalLoader, trainLoader, and the loss are simply accessed, while the optim and model objects are modified according to the training procedure.
+\item output: The loss values for each batch are logged to the filesystem using the global Logger \ref{ModuleLog}.
+\item exception: N/A
+\end{itemize}
 
-\begin{enumerate}
-  \item \textbf{trainEpoch}(trainLoader (PyTorch Dataloader), optimizer (Optimizer Module), model (Model Module), loss (Loss Module)):
-  \begin{enumerate}
-    \item \textbf{Input:} The dataloader of training data, the model to be optimized, the ADAM optimizer, and the loss function for backpropagation.
-    \item \textbf{Method Description:} This method optimizes the model over the input training data to lower the given loss that the model incurs. 
-    Statistics describing the performance of the model (loss) over the training set are logged using the global logger.
-    \item \textbf{Output:} N/A 
-  \end{enumerate}
-  \item \textbf{evalModel}(evalLoader (PyTorch Dataloader), model (Model Module)):
-  \begin{enumerate}
-    \item \textbf{Input:} The dataloader of evaluation data and the model to be evaluated.
-    \item \textbf{Method Description:} This method collects the mAP metrics obtained from applying the current model to the evaluation dataset. These
-    metrics are logged using the global logger. The current state of the model is additionally saved using the checkpointing system.
-    \item \textbf{Output:} N/A
-  \end{enumerate}
-\end{enumerate}
+\noindent eval():
+\begin{itemize}
+  \item transition: N/A
+  \item output: The mAP metrics for the current model are collected using the Evaluation Module's \ref{ModuleEval} eval access program. Only the evalLoader and model are passed in here since no checkpoint needs to be loaded. These metrics are logged to the filesystem using the global Logger \ref{ModuleLog}. Additionally, a checkpoint of the current model is saved to the file system using the Checkpoint Module's \ref{ModuleCkpt} saveCheckpoint exported access program (the CkptPath is up to the code writer's discretion as it is based on their local file setup).
+\end{itemize}
 
 \newpage
 
@@ -277,7 +379,11 @@ train & - & - & - \\
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-inference & imagePath (str), lidarPath (str), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$), Model (Model Module), Checkpoint (Checkpoint Module) & - & - \\
+setupData & imagePath (str), lidarPath (str) & - & - \\
+\hline
+makePred & ckptPath (str) & - & - \\
+\hline
+inference & boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$) & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -285,7 +391,12 @@ inference & imagePath (str), lidarPath (str), boundingBoxesGT (PyTorch Tensor $R
 \subsection{Semantics}
 
 \subsubsection{State Variables}
-
+\begin{itemize}
+  \item imageTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$)
+  \item lidarTens (Pytorch Tensor $R^{3\times{}n_{l}}$)
+  \item boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$)
+  \item model (Model ADT)
+\end{itemize}
 
 \subsubsection{Environment Variables}
 
@@ -295,34 +406,26 @@ inference & imagePath (str), lidarPath (str), boundingBoxesGT (PyTorch Tensor $R
 
 
 \subsubsection{Access Routine Semantics}
-\noindent inference():
+\noindent setupData(imagePath (str), lidarPath (str)):
 \begin{itemize}
-\item transition: N/A 
+\item transition: This exported access program uses the Data Processing Module's \ref{ModuleDataProc} process access program to load the data and save it to the imageTens and lidarTens state variables.
 \item output: N/A
 \item exception: N/A
 \end{itemize}
 
-\subsubsection{Local Functions}
-\begin{enumerate}
-  \item \textbf{getProcessedData}(imagePath (str), lidarPath (str)) $\rightarrow$ imageTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$), lidarTens (Pytorch Tensor $R^{3\times{}n_{l}}$):
-  \begin{enumerate}
-    \item \textbf{Input:} The string paths to the image and lidar files for the scene to infer on.
-    \item \textbf{Method Description:} This method essentially is just a local wrapper for the Data Processing Module's process access program.
-    \item \textbf{Output:} The tensors for the multiview images and the LiDAR pointcloud, obtained using the Data Processing Module.
-  \end{enumerate}
-  \item \textbf{getPredBoundingBoxes}(imageTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$), lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$), Model (Model Module)) $\rightarrow$ boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$):
-  \begin{enumerate}
-    \item \textbf{Input:} The model to be used for inference in addition to the input data (multiview camera images and a LiDAR pointcloud).
-    \item \textbf{Method Description:} This method uses the model to get a set of predicted bounding boxes for the given input data.
-    \item \textbf{Output:} The predicted bounding boxes.
-  \end{enumerate}
-  \item \textbf{plotBoundingBoxes}(lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$), boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$)):
-  \begin{enumerate}
-    \item \textbf{Input:} The input LiDAR pointcloud alongside the ground truth and predicted bounding boxes for this scene. 
-    \item \textbf{Method Description:} This method displays a 3D plot of the ground truth and predicted bounding boxes on the input LiDAR pointcloud to allow for visual inspection (using the plotting module).
-    \item \textbf{Output:} N/A
-  \end{enumerate}
-\end{enumerate}
+\noindent makePred(ckptPath (str)):
+\begin{itemize}
+\item transition: This exported access program first uses the Checkpoint Module's \ref{ModuleCkpt} loadCheckpoint access program with model and ckptPath as inputs to load the saved checkpoint into the model (changes the model's weights). This model is then run on the imageTens and lidarTens state variables to generate an output that is saved into the boundingBoxesPred state variable.
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+\noindent inference(boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$)):
+\begin{itemize}
+\item transition: N/A 
+\item output: This module uses the Plotting Module's \ref{ModulePlot} plot access program to display the lidar pointcloud alongside the predicted and ground truth bounding boxes. This is to allow for visual inspection of the predictions.
+\item exception: N/A
+\end{itemize}
 
 \newpage
 
@@ -355,7 +458,7 @@ inference & imagePath (str), lidarPath (str), boundingBoxesGT (PyTorch Tensor $R
   \hline
   \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
   \hline
-  eval & evalLoader (PyTorch Dataloader), model (Model Module), ckpt (Checkpoint Module) & metrics (Named Tuple of (str, $R$)) & - \\
+  eval & evalLoader (PyTorch Dataloader), model (Model Module \ref{ModuleModel}), ckpt (Checkpoint Module \ref{ModuleCkpt}) & metrics (Named Tuple of (str, $R$)) & - \\
   \hline
   \end{tabular}
 \end{center}
@@ -371,7 +474,7 @@ inference & imagePath (str), lidarPath (str), boundingBoxesGT (PyTorch Tensor $R
 \subsubsection{Assumptions}
 
 \subsubsection{Access Routine Semantics}
-\noindent eval():
+\noindent eval(evalLoader (PyTorch Dataloader), model (Model Module), ckpt (Checkpoint Module)):
 \begin{itemize}
 \item transition: N/A 
 \item output: This function will run the input model over the evaluation loader and collect the mAP statistics over this set of data. These statistics will then be returned as output. If a checkpoint is passed in, the model will first load the given checkpoint. Details of the mAP calculation can be seen in the SRS's IM4.
@@ -386,11 +489,13 @@ inference & imagePath (str), lidarPath (str), boundingBoxesGT (PyTorch Tensor $R
 \section{MIS of Logger Module} \label{ModuleLog} 
 This module is simply used to represent a wrapper around a global Tensorboard logger (\href{https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html}{PyTorch tutorial on using Tensorboard})
 that can be used in any module to log metrics to a logging file. It interacts with the file system environment variable and can be used to visualize logs after saving them.
+
+This module interacts with the File System environmental variable, saving log files to it.
 \newpage
 
 \section{MIS of Model Module} \label{ModuleModel} 
 
-\subsection{Module}
+\subsection{Template}
 
 \subsection{Uses}
 \begin{itemize}
@@ -412,7 +517,7 @@ that can be used in any module to log metrics to a logging file. It interacts wi
   \hline
   \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
   \hline
-  init & - & - & - \\
+  Model & - & Model & - \\
   \hline
   forward & imgTens (PyTorch Tensor $R^{n_{cams}\times{}3\times{}h\times{}w}$), lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$) & boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$) & - \\
   \hline
@@ -423,8 +528,8 @@ that can be used in any module to log metrics to a logging file. It interacts wi
 
 \subsubsection{State Variables}
 \begin{itemize}
-  \item pcdetLayers (OpenPCDet Layers Module)
-  \item eqLayers (Equivariant Layers Module)
+  \item pcdetLayers (OpenPCDet Layers Module \ref{ModulePCDet})
+  \item eqLayers (Equivariant Layers Module \ref{ModuleEQ})
 \end{itemize}
 
 \subsubsection{Environment Variables}
@@ -433,10 +538,10 @@ that can be used in any module to log metrics to a logging file. It interacts wi
 \subsubsection{Assumptions}
 
 \subsubsection{Access Routine Semantics}
-\noindent init():
+\noindent Model():
 \begin{itemize}
-\item transition: This function will load the model-related configuration from the global configuration module and will then create the OpenPCDet and Equivariant Layers accordingly. References to these layers will be stored in the pcdetLayers and eqLayers state variables. 
-\item output: N/A
+\item transition: This function will load the model-related configuration from the Config module \ref{ModuleCfg} and will then create the OpenPCDet and Equivariant Layers accordingly. References to these layers will be stored in the pcdetLayers and eqLayers state variables. 
+\item output: This function will return a reference to self.
 \item exception: N/A
 \end{itemize}
 
@@ -454,7 +559,7 @@ that can be used in any module to log metrics to a logging file. It interacts wi
 
 \section{MIS of Loss Module} \label{ModuleLoss} 
 
-\subsection{Module}
+\subsection{Template}
 
 
 
@@ -481,7 +586,7 @@ that can be used in any module to log metrics to a logging file. It interacts wi
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & - & - & - \\
+Loss & - & Loss & - \\
 \hline
 forward & boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$) & Loss Value (PyTorch Tensor $R$) & - \\
 \hline
@@ -501,14 +606,14 @@ forward & boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$), boundin
 \subsubsection{Assumptions}
 
 \subsubsection{Access Routine Semantics}
-\noindent init():
+\noindent Loss():
 \begin{itemize}
-\item transition: This method will set the loss module's hyperparamters according to the loss-related configuration from the global configuration module. 
-\item output: N/A
+\item transition: This method will set the loss module's hyperparamters according to the loss-related configuration from the Config module \ref{ModuleCfg}. 
+\item output: This method will output a reference to self.
 \item exception: N/A
 \end{itemize}
 
-\noindent forward():
+\noindent forward(boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$), boundingBoxesGT (PyTorch Tensor $R^{g\times{}n_{b}}$)):
 \begin{itemize}
 \item transition: N/A 
 \item output: This method will use the predicted and ground truth bounding boxes to regress and output a loss value. Details of the loss function to be implemented can be seen in the SRS's IM2.
@@ -521,7 +626,7 @@ forward & boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$), boundin
 
 \section{MIS of Optimizer Module} \label{ModuleOptim} 
 
-\subsection{Module}
+\subsection{Template}
 
 
 
@@ -547,7 +652,11 @@ forward & boundingBoxesPred (PyTorch Tensor $R^{g\times{}n_{\hat{b}}}$), boundin
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & modelParams (Sequence of PyTorch Parameter) & - & - \\
+Optimizer & modelParams (Sequence of PyTorch Parameter) & Optimizer & - \\
+\hline
+step & - & - & - \\
+\hline
+zero\_grad & - & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -570,9 +679,23 @@ init & modelParams (Sequence of PyTorch Parameter) & - & - \\
 
 
 \subsubsection{Access Routine Semantics}
-\noindent init():
+\noindent Optimizer(modelParams (Sequence of PyTorch Parameter)):
 \begin{itemize}
-\item transition: This method will set the loss module's hyperparameters according to the optimizer-related configuration from the global configuration module. It will also save a reference to passed in model parameters in the modelParameters state variable. Details of the ADAM Optimizer can be seen in the SRS's IM3.
+\item transition: This method will set the optimizer module's hyperparameters according to the optimizer-related configuration from the Config module \ref{ModuleCfg}. It will also save a reference to passed in model parameters in the modelParameters state variable. Details of the ADAM Optimizer can be seen in the SRS's IM3.
+\item output: This method will return a reference to self.
+\item exception: N/A
+\end{itemize}
+
+\noindent step():
+\begin{itemize}
+\item transition: This method will update the modelParameters based on their gradients, following the ADAM optimization method. Details of the ADAM Optimizer can be seen in the SRS's IM3.
+\item output: N/A
+\item exception: N/A
+\end{itemize}
+
+\noindent zero\_grad():
+\begin{itemize}
+\item transition: This method will clear all gradients for the modelParameters.
 \item output: N/A
 \item exception: N/A
 \end{itemize}
@@ -622,7 +745,7 @@ plot & lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$), boundingBoxesGT (PyTorch
 \subsubsection{Environment Variables}
 
 \begin{itemize}
-  \item Computer Screen
+  \item Computer Screen (2D sequence of RGB tuples)
 \end{itemize}
 
 \subsubsection{Assumptions}
@@ -668,9 +791,9 @@ plot & lidarTens (PyTorch Tensor $R^{n_{l}\times{}3}$), boundingBoxesGT (PyTorch
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-saveCheckpoint & model (PyTorch Module), CkptPath (str) & - & - \\
+saveCheckpoint & model (PyTorch Module \ref{ModuleTorch}), CkptPath (str) & - & - \\
 \hline
-loadCheckpoint & model (PyTorch Module), CkptPath (str) & - & - \\
+loadCheckpoint & model (PyTorch Module \ref{ModuleTorch}), CkptPath (str) & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -739,7 +862,7 @@ loadCheckpoint & model (PyTorch Module), CkptPath (str) & - & - \\
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & isEval (boolean) & - & - \\
+Data & isEval (boolean) & Data & - \\
 \hline
 getDataloader & - & loader (PyTorch Dataloader) & -  \\
 \hline
@@ -763,12 +886,12 @@ getDataloader & - & loader (PyTorch Dataloader) & -  \\
 
 
 \subsubsection{Access Routine Semantics}
-\noindent init():
+\noindent Data():
 \begin{itemize}
-\item transition: This function will load the data-related configuration from the global configuration module and will then create the dataset accordingly.
+\item transition: This function will load the data-related configuration from the Config module \ref{ModuleCfg} and will then create the dataset accordingly.
 This dataset will either be the NuScenes (\cite{caesar2020nuscenes}) or the Waymo (\cite{sun2020scalability}) dataset for now and will be stored in the dataset state variable. If isEval is false,
 the training portion of the dataset will be loaded. If isEval is true, the evaluation portion of the dataset will be loaded.
-\item output: N/A
+\item output: This function will return a reference to self. 
 \item exception: N/A
 \end{itemize}
 
@@ -899,7 +1022,7 @@ The main list of components that are used from this library is as follows:
 
 \section{MIS of Config Module} \label{ModuleCfg} 
 
-\subsection{Module}
+\subsection{Template}
 
 
 
@@ -912,7 +1035,7 @@ The main list of components that are used from this library is as follows:
 
 \subsubsection{Exported Constants}
 \begin{itemize}
-  \item CONFIG\_PATH
+  \item CONFIG\_PATH (str): The standard filesystem path pointing to where the configuration file is. For now this is set to "./checkpoint" but the idea is to have it overridden through a command-line argument where necessary.  
 \end{itemize}
 
 
@@ -923,7 +1046,7 @@ The main list of components that are used from this library is as follows:
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-init & - & - & - \\
+Config & - & Config & - \\
 \hline
 getModelConfig & - & - & - \\
 \hline
@@ -958,38 +1081,38 @@ getLossConfig & - & - & - \\
 
 
 \subsubsection{Access Routine Semantics}
-\noindent init():
+\noindent Config():
 \begin{itemize}
-  \item transition: This method loads the yaml configuration file stored at the predefined constant path CONFIG\_PATH. Then, the dictionary loaded from this JSON file is split into model, data, optimizer, and loss sections. Each of these is saved to the corresponding state variable for this module.
-  \item output: N/A
+  \item transition: This method loads the yaml configuration file stored at the predefined constant path CONFIG\_PATH. Then, the dictionary loaded from this JSON file is split into model, data, optimizer, and loss sections. Each of these is saved to the corresponding state variable for this module. A sample configuration file can be seen \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{here}.
+  \item output: This method returns a reference to self.
   \item exception: N/A
 \end{itemize}
 
 \noindent getModelConfig():
 \begin{itemize}
 \item transition: N/A 
-\item output: This method returns the configuration parameters for the model module.
+\item output: This method returns the configuration parameters for the model module \ref{ModuleModel}.
 \item exception: N/A
 \end{itemize}
 
 \noindent getDataConfig():
 \begin{itemize}
   \item transition: N/A
-  \item output: This method returns the configuration parameters for the data module.
+  \item output: This method returns the configuration parameters for the data module \ref{ModuleData}.
   \item exception: N/A
 \end{itemize}
 
 \noindent getOptimConfig():
 \begin{itemize}
   \item transition: N/A
-  \item output: This method returns the configuration parameters for the optimizer module.
+  \item output: This method returns the configuration parameters for the optimizer module \ref{ModuleOptim}.
   \item exception: N/A
 \end{itemize}
 
 \noindent getLossConfig():
 \begin{itemize}
   \item transition: N/A
-  \item output: This method returns the configuration parameters for the loss module.
+  \item output: This method returns the configuration parameters for the loss module \ref{ModuleLoss}.
   \item exception: N/A
 \end{itemize}
 
