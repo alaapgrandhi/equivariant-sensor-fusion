@@ -69,18 +69,18 @@ sensor input.
 
 \subsection{Objectives}
 
-One of the two primary objectives is to build confidence in the correctness of the software.
+The primary objectives is to build confidence in the correctness of the software.
 As a routinely used and validated open-source repository, the base functionality of the OpenPCDet
 repository (\cite{openpcdet2020}) is considered to be error-free and thus its correctness is outside the scope of this document/project.
 The installation of the software and the extensions made to it are the components for which correctness will be 
 verified. 
 
-Alongside correctness, verifying the accuracy of \ProjectName{}relative to existing baselines implemented in 
-OpenPCDet (\cite{openpcdet2020}) is the second primary objective. Since the software is intended to serve as a foundation
+Verifying the accuracy of \ProjectName{}relative to existing baselines implemented in 
+OpenPCDet (\cite{openpcdet2020}) is the secondary objective. Since the software is intended to serve as a foundation
 for future research, its relative accuracy compared to state-of-the-art baseline methods will serve 
 as a metric to judge how much it contributes to research in the field.
 
-A secondary objective is ensuring the usability of the software. Since the library will be extended and
+A tertiary objective is ensuring the usability of the software. Since the library will be extended and
 used for research purposes, it is important to minimize the effort needed to understand and modify the code
 as needed. 
 
@@ -121,17 +121,57 @@ testing tools that will be used.
 
 \subsection{SRS Verification Plan}
 
-The SRS will be reviewed in two stages. First, the Project Supervisor and the Domain
-Expert Reviewer will evaluate the document using the SRS checklist from lecture (cite here).
-Since they are familiar with the document structure, they will be able to provide feedback
-on how well the document adheres to the template and the required structure (in addition to 
-providing feedback on document content). 
+The SRS will be verified in a manner that is inspired and informed by Liu (insert cite here).
+Specifically, I will verify my SRS through the following steps:
 
-Following the creation of a series of github issues corresponding 
-to feedback on the document, the second stage of SRS reviewing will begin. At that point, a meeting 
-will be set up with my Masters supervisor to go over the scientific principles discussed in the SRS document 
-alongside the suggested changes and questions from the issues on github. Since he is familiar with 
-my research he can provide additional feedback on any technical inconsistencies or ambiguities in the document.
+First, I will review my SRS document as a whole by doing the following:
+\begin{enumerate}
+  \item Going through the document using the \href{https://github.com/alaapgrandhi/equivariant-sensor-fusion/blob/main/docs/Checklists/SRS-Checklist.pdf}{SRS checklist} on my own and taking my own set of notes
+  \item Sharing the document with my Domain Expert and allowing them to create their own notes
+  \item Sitting down with my Domain Expert and asking a set of open-ended questions to my Domain Expert to see if the document was clear to them:
+  \begin{itemize}
+    \item What general problem do you think SRS aims to address?
+    \item How could the object detection task focused on in the SRS aid Autonomous Driving?
+    \item What is your understanding of the difference between the training and inference pipelines?
+    \item What do you think some important characteristics of a solution would be here?
+    \item How did the mathematical notation used in the SRS affect the reading experience?
+    \item Beyond these, other questions will be asked based on their responses to the above
+  \end{itemize}
+  \item Comparing our notes on the document to create unified more complete set of notes
+\end{enumerate}
+By separating my note-taking process from my Domain Expert's note-taking process, I will not 
+run the risk of accidentally influencing or biasing their understanding of the document with my 
+own thought process. This way, I can get a better idea of the SRS's merit as a standalone document.
+
+
+Following this high-level review, I plan on going through the SRS line-by-line with my Masters Supervisor 
+(Dr. Matthew Giamou). As someone with a strong history of publishing robotics-focused research, he should be 
+able to guide me on ways to make my SRS more useful for the research community I am targeting (since this project 
+aims to empower future research). I will center this line-by-line review around the following questions:
+\begin{enumerate}
+  \item Does the mathematical notation used align with standards in the field?
+  \item Does the problem outlined in the introduction reflect an actual gap in the field?
+  \item Do the project scope and system constraints seem reasonable given past research in the field?
+  \item Would it be reasonable to assume that the average computer-vision robotics conference attendee possesses the characteristics of the intended reader?
+  \item Do the training and inference pipelines outlined in the general system description seem reasonable?
+  \item Could you see researchers using this software?
+  \item Is all of the terminology defined correctly?
+  \item Do the assumptions made generally hold for autonomous robotics?
+  \item Do the mathematical models presented seen correct?
+  \item Are each of the instance models presented relevant to the task at hand?
+  \item Is the bounding box loss function a sufficient signal for training the model?
+  \item Does the mAP IOU-based evaluation metric accurately reflect the usefulness of the software?
+  \item Do the functional requirements align with prior research in the field?
+  \item Are the nonfunctional requirements sufficient for gauging the quality of the software?
+  \item Are there any forseeable likely or unlikely changes that I seem to be missing?
+\end{enumerate}
+
+
+Once both of these have been conducted, I plan on taking suggestions for changes from my Domain Expert 
+to refine my document. Specifically, this feedback will be provided in the form of Github issues. Following 
+the creation of such issues, I will review the document with these suggestions in mind and will make changes 
+where appropriate (or explain why such a change is unnecessary if not). Then, the Github issues will be responded to and closed. 
+Due to time constraints, a prototype will not be used for SRS verification. 
 
 \subsection{Design Verification Plan}
 
@@ -152,22 +192,17 @@ will evaluate during regular discussions:
 
 \subsection{Verification and Validation Plan Verification Plan}
 
-The VnV plan will be verified in two parts corresponding to the two different 
-types of tests it contains. 
-
-Where possible, tests governed by automated test suites
-like pytest will be tested using mutation testing to ensure that these tests sufficiently
-cover coding mistakes that are expected to happen. The specific `mutations' to be inserted
-into the code will be decided after the implementation is done. 
-
 Manual tests and the overall structure of the VnV plan will be reviewed by the Project Supervisor
 and the Domain Expert Reviewer. This will be done to both ensure that the document adheres to the
-template and to ensure that the tests presented sufficiently cover the requirements described in
-the SRS document (\cite{SRS}).
+\href{https://github.com/alaapgrandhi/equivariant-sensor-fusion/blob/main/docs/Checklists/VnV-Checklist.pdf}{template} and to ensure that the tests presented sufficiently cover the requirements described in
+the SRS document (\cite{SRS}). Automated tests will be verified by mutation testing where possible.
 
 \subsection{Implementation Verification Plan} \label{imple_ver}
 
 The implementation will simply be verified through semi-regular code walkthroughs with my Domain Expert.
+These walkthroughs will consist of me going through my MIS modules one-by-one and displaying these side-by-side with the
+code sections corresponding to them. By explaining the code that is meant to realize each module in a step-by-step manner, 
+my Domain Expert will be able to tell me if my code seems incorrect or does not match its specification at any point.
 Additionally, the tests described in Section \ref{System_Tests} will serve as a basis for verifying that the 
 implementation meets the requirements detailed in the SRS document. (\cite{SRS})
 
@@ -188,12 +223,12 @@ input configurations.
 
 \subsection{Software Validation Plan}
 
-Since requirement NFR1 specifically involves comparing the accuracy of the solution
-to a baseline on a publicly available dataset, validation is already implicitly conducted for the library.
-Considering that prior works in the field typically use mAP as a measure of solution quality, further validation
-is out of scope for this project due to the limited timeline. Validation of the requirements themselves will only 
+In order to validate my Software, I plan on running it over the evaluation set of NuScenes and 
+saving a set of visualizations for each input. Specifically, these visualizations will display
+input pointclouds alongside predicted bounding boxes. From there, my Domain Expert and I will visually
+inspect these to see if they provide a sufficient and accurate representation of the objects in the Autonomous 
+Vehicle's surroundings. Validation of the requirements themselves will only 
 briefly be covered during discussions with my Masters Supervisor.
-
 \section{System Tests} \label{System_Tests}
 
 This section details a set of tests that shall be sufficient to ensure that \ProjectName{}meets the requirements detailed in the SRS document.
@@ -215,12 +250,12 @@ file formats for the camera images and LiDAR pointclouds.
 
 Control: Automatic
 					
-Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming LiDAR pointcloud in the TFRecord format
-is also expected to have already been loaded.
+Initial State: The inference pipeline initialized with a \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pre-defined trained model} and \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{configuration} loaded. A clean, conforming LiDAR pointcloud in the pcd.bin format
+from the NuScenes dataset is also expected to have already been loaded (this will be handpicked from NuScenes/v1.0-trainval/samples/LIDAR\_TOP and put into the test's directory).
 					
-Input: A valid (subject to input constraints) multiview camera image set stored in one of the file formats specified in requirement R1 (one test case for each).
+Input: A valid (subject to input constraints) multiview camera image set stored in each of the file formats specified in requirement R1 (one test case for file format).
 					
-Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes.
+Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes. The actual values for these bounding boxes do not matter as long as the shape of the output is as expected and the constraints on the values (i.e. height of a bounding box is non-negative) hold.
 
 Test Case Derivation: For all the file formats specified in requirement R1, the inference pipeline should run without issues. All other aspects are kept
 constant between the tests to ensure that the test can detect any issues with specific image file formats.
@@ -233,8 +268,8 @@ by pytest on github push.
 
 Control: Automatic
 					
-Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming LiDAR pointcloud in the TFRecord format
-is also expected to have already been loaded.
+Initial State: The inference pipeline initialized with a \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pre-defined trained model} and \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{configuration} loaded. A clean, conforming LiDAR pointcloud in the pcd.bin format
+from the NuScenes dataset is also expected to have already been loaded (this will be handpicked from NuScenes/v1.0-trainval/samples/LIDAR\_TOP and put into the test's directory).
 					
 Input: A valid (subject to input constraints) multiview camera image set stored in a file format that is not expected to be handled by the program (a binary image).
 					
@@ -256,12 +291,12 @@ load a set of multiview camera images stored in a binary format.
 
 Control: Automatic
 					
-Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming set of multiview camera images in the PNG format
-is also expected to have already been loaded.
+Initial State: The inference pipeline initialized with a \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pre-defined trained model} and \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{configuration} loaded. A clean, conforming set of multiview camera images in the JPEG format
+from the NuScenes Dataset is also expected to have already been loaded (this set will be handpicked from NuScenes/v1.0-trainval/samples/CAM\_* with one corresponding image from each CAM folder).
 					
-Input: A valid (subject to input constraints) LiDAR pointcloud stored in one of the file formats specified in requirement R2 (one test case for each).
+Input: A valid (subject to input constraints) LiDAR pointcloud stored in each of the file formats specified in requirement R2 (one test case for each format).
 					
-Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes.
+Output: The inference pipeline should run as expected without errors and output a set of predicted bounding boxes. The actual values for these bounding boxes do not matter as long as the shape of the output is as expected and the constraints on the values (i.e. height of a bounding box is non-negative) hold.
 
 Test Case Derivation: For all the file formats specified in requirement R2, the inference pipeline should run without issues. All other aspects are kept
 constant between the tests to ensure that the test can detect any issues with specific image file formats.
@@ -274,10 +309,10 @@ by pytest on github push.
 
 Control: Automatic
 					
-Initial State: The inference pipeline initialized with a pre-defined trained model and configuration loaded. A clean, conforming set of multiview camera images in the PNG format
-is also expected to have already been loaded.
+Initial State: The inference pipeline initialized with a \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pre-defined trained model} and \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{configuration} loaded. A clean, conforming set of multiview camera images in the JPEG format
+from the NuScenes Dataset is also expected to have already been loaded (this set will be handpicked from NuScenes/v1.0-trainval/samples/CAM\_* with one corresponding image from each CAM folder).
 					
-Input: A valid (subject to input constraints) LiDAR pointcloud stored in the file format specified in table x for the given test case.
+Input: A LiDAR pointcloud stored in the binary file format (since this format is not one of the ones specified in R2).
 					
 Output: A invalid-input error is expected to be thrown by the program.
 
@@ -395,11 +430,39 @@ I will ask them the following questions afterwords to gauge how easy to understa
 Afterwords, I will test further test their understanding of the code by letting them play around with it and getting them to perform the following tasks with assistance as necessary.
 \begin{enumerate}
   \item Train a model using $x$ (to be determined after implementation) configuration.
-  \item Evaluate $x$ (to be determined after implementation) pretrained model on the nuScenes validation dataset (\cite{caesar2020nuscenes}).
-  \item Modify the configuration of $x$ (to be determined after implementation) model to have $x$ (to be determined after implementation) effect.
+  \item Evaluate a \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pretrained model} on the nuScenes validation dataset (\cite{caesar2020nuscenes}).
+  \item Modify the \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{configuration} for this pretrained model to change the post-processing prediction range.
 \end{enumerate}
 
 Through the code walkthrough and their subsequent interaction with it, I hope to get at least a rough idea of how understandable the code is.
+
+\subsubsection{Tests for Installability}
+
+\paragraph{Installability Testing}
+
+Since I implemented the code, it would not really make sense to test the installability of \progname{} myself.
+This is because I am familiar with the bugs that I faced when initially installing the code and thus would be able to 
+troubleshoot on the fly where the user might not be able to. Rather, I plan to sit down with either my domain expert 
+or Masters Supervisor (Dr. Matthew Giamou) and have them perform the following steps with minimal guidance:
+
+\begin{enumerate}
+  \item Clone the repository from github to get a fresh copy by running "git clone URL"
+  \item Create a conda environment from the provided environment.yml file by running "conda env create -f environment.yml" from the environment subfolder
+  \item Setup the repository using OpenPCDet's setup.py file by running "python setup.py develop" from the base directory
+  \item Follow OpenPCDet's dataset setup guide for the NuScenes Dataset as explained \href{https://github.com/open-mmlab/OpenPCDet/blob/master/docs/GETTING_STARTED.md}{here}
+  \begin{enumerate}
+    \item Since the full dataset is too large, I would tell them to install the mini version instead
+    \item If they do not want to have to create a NuScenes account to download the dataset, they can simply download the mini set by running "wget https://d36yt3mvayqw5m.cloudfront.net/public/v1.0/v1.0-mini.tgz"
+    \item The pip install step in OpenPCDet's dataset setup guide should be ignored as it is already installed in the conda environment
+    \item The multi-modal data infos should be generated rather than the lidar-only infos
+  \end{enumerate}
+  \item Install the \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pretrained BEVFusion model} and place it in the pretrained\_models folder
+  \item Install the \href{https://drive.google.com/file/d/1v74WCt4_5ubjO7PciA5T0xhQc9bz_jZu/view}{Pretrained NuImages Swin-Transformer} and place it in the pretrained\_models folder
+  \item Evaluate this pretrained model on the nuScenes mini validation dataset (\cite{caesar2020nuscenes}) (I will add a guide for this in the Github's README file)
+\end{enumerate}
+
+If they are able to perform all these steps without errors (or with minimal errors that a researcher in the field would be able to troubleshoot),
+then I would consider this test to have passed. Otherwise, the steps that fail would provide insight into how the installability of the software could be improved.
 
 \subsection{Traceability Between Test Cases and Requirements}
 
