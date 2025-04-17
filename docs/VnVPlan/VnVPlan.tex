@@ -282,6 +282,40 @@ where images are input in unforeseen or invalid formats, and makes sure that the
 How test will be performed: This test will be automatically run through pytest on github push in much the same way as the valid tests. The only difference is that it will
 load a set of multiview camera images stored in a binary format.
 
+\item{test-camera-small\\}
+
+Control: Automatic
+					
+Initial State: The inference pipeline initialized with a \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pre-defined trained model} and \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{configuration} loaded. A clean, conforming LiDAR pointcloud in the pcd.bin format
+from the NuScenes dataset is also expected to have already been loaded (this will be handpicked from NuScenes/v1.0-trainval/samples/LIDAR\_TOP and put into the test's directory).
+					
+Input: A multiview camera image set with a height of one and a width of one (too small) stored in the valid JPEG format.
+					
+Output: A invalid-input error is expected to be thrown by the program.
+
+Test Case Derivation: The inference pipeline should not even try to run for an image that is does not match the input constraint. This is to test for cases
+where improperly-sized images are input, and makes sure that the system's response to such input types is well-defined. 
+
+How test will be performed: This test will be automatically run through pytest on github push in much the same way as the valid tests. The only difference is that it will
+load a set of multiview camera images of size 1x1.
+
+\item{test-camera-wrongnumviews\\}
+
+Control: Automatic
+					
+Initial State: The inference pipeline initialized with a \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{pre-defined trained model} and \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{configuration} loaded. A clean, conforming LiDAR pointcloud in the pcd.bin format
+from the NuScenes dataset is also expected to have already been loaded (this will be handpicked from NuScenes/v1.0-trainval/samples/LIDAR\_TOP and put into the test's directory).
+					
+Input: A multiview camera image set with ten views (where NuScenes expects six) stored in the valid JPEG file format.
+					
+Output: A invalid-input error is expected to be thrown by the program.
+
+Test Case Derivation: The inference pipeline should not even try to run for a multiview image with a different number of views than the training dataset (NuScenes). This is to test for cases
+where the wrong amount of image views are input, and makes sure that the system's response to such input types is well-defined. 
+
+How test will be performed: This test will be automatically run through pytest on github push in much the same way as the valid tests. The only difference is that it will
+load a set of multiview camera images with ten views instead of the normal six.
+
 \end{enumerate}
 
 \paragraph{LiDAR Pointcloud Input Testing}
