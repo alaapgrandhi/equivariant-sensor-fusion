@@ -18,6 +18,8 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows}
 \usepackage{pdflscape}
+\usepackage{xr-hyper}
+\externaldocument[MIS-]{../SoftDetailedDes/MIS}
 
 \newcommand{\ProjectName}{ESF }
 
@@ -234,24 +236,24 @@ actually be implemented.
 \midrule
 
 \multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} 
-& Config Module\\
-& Data Module\\
-& Model Module\\
-& Checkpoint Module\\
-& Training Module\\
-& Inference Module\\
-& Loss Module\\ 
-& Evaluation Module\\
-& Optimization Module\\
-& Data Processing Module\\
-& Equivariant Layer Module\\
-& OpenPCDet Layer Module\\
+& Config Module \ref{MIS-ModuleCfg}\\
+& Data Module \ref{MIS-ModuleData}\\
+& Model Module \ref{MIS-ModuleModel}\\
+& Checkpoint Module \ref{MIS-ModuleCkpt}\\
+& Training Module \ref{MIS-ModuleTrain}\\
+& Inference Module \ref{MIS-ModuleInfer}\\
+& Loss Module \ref{MIS-ModuleLoss}\\ 
+& Evaluation Module \ref{MIS-ModuleEval}\\
+& Optimization Module \ref{MIS-ModuleOptim}\\
+& Data Processing Module \ref{MIS-ModuleDataProc}\\
+& Equivariant Layer Module \ref{MIS-ModuleEQ}\\
+& OpenPCDet Layer Module \ref{MIS-ModulePCDet}\\
 \midrule
 
 \multirow{3}{0.3\textwidth}{Software Decision Module}
-& Plotting Module\\
-& PyTorch Module\\
-& Logging Module\\
+& Plotting Module \ref{MIS-ModulePlot}\\
+& PyTorch Module \ref{MIS-ModuleTorch}\\
+& Logging Module \ref{MIS-ModuleLog}\\
 \bottomrule
 
 \end{tabular}
@@ -306,7 +308,7 @@ to be implemented.
 
 [Record, Library, Abstract Object, or Abstract Data Type]
 
-\subsubsection{Config Module (\mref{mCo})}
+\subsubsection{Config Module (\mref{mCo}) (\ref{MIS-ModuleCfg} in MIS)}
 \begin{description}
 \item[Secrets:] The format and structure of the input configuration.
 \item[Services:] Loads the configuration from a predefined file and makes it accessible to other modules.
@@ -314,7 +316,7 @@ to be implemented.
 \item[Type of Module:] Abstract Object
 \end{description}
 
-\subsubsection{Data Module (\mref{mD})}
+\subsubsection{Data Module (\mref{mD}) (\ref{MIS-ModuleData} in MIS)}
 \begin{description}
 \item[Secrets:] The format and structure of the training and evaluation datasets along with their respective loaders.
 \item[Services:] Loads the input data and packages it in a form (a dataloader) that facilitates batched training.
@@ -322,7 +324,7 @@ to be implemented.
 \item[Type of Module:] Abstract Data Type
 \end{description}
 
-\subsubsection{Model Module (\mref{mM})}
+\subsubsection{Model Module (\mref{mM}) (\ref{MIS-ModuleModel} in MIS)}
 \begin{description}
 \item[Secrets:] The format and structure of the deep learning fusion model.
 \item[Services:] Forms a learnable and differentiable mapping from input images and LiDAR to predicted bounding boxes.
@@ -331,7 +333,7 @@ to be implemented.
 \end{description}
 \subsubsection{Etc.}
 
-\subsubsection{Checkpoint Module (\mref{mCh})}
+\subsubsection{Checkpoint Module (\mref{mCh}) (\ref{MIS-ModuleCkpt} in MIS)}
 \begin{description}
 \item[Secrets:] The methods for saving and loading a model from the file system..
 \item[Services:] Allows for the saving of trained models to the file system and the loading of model weights from the file system.
@@ -339,7 +341,7 @@ to be implemented.
 \item[Type of Module:] Library
 \end{description}
 
-\subsubsection{Training Module (\mref{mT})}
+\subsubsection{Training Module (\mref{mT}) (\ref{MIS-ModuleTrain} in MIS)}
 \begin{description}
 \item[Secrets:] The process by which a model is trained on the input dataset.
 \item[Services:] Trains the model on the input dataset using the loss function and the optimizer specified in the configuration file.
@@ -348,7 +350,7 @@ to be implemented.
 \end{description}
 \subsection{Software Decision Module}
 
-\subsubsection{Inference Module (\mref{mI})}
+\subsubsection{Inference Module (\mref{mI}) (\ref{MIS-ModuleInfer} in MIS)}
 \begin{description}
 \item[Secrets:] The process by which a model is run in inference on some input scene.
 \item[Services:] Uses a trained model to produce a visualization of predicted bounding boxes on an input scene.
@@ -356,7 +358,7 @@ to be implemented.
 \item[Type of Module:] Library
 \end{description}
 
-\subsubsection{Loss Module (\mref{mLo})}
+\subsubsection{Loss Module (\mref{mLo}) (\ref{MIS-ModuleLoss} in MIS)}
 \begin{description}
 \item[Secrets:] The method by which a loss value is produced from a given input.
 \item[Services:] Compares a model's predicted bounding boxes to the ground truth bounding boxes for a given scene in order to produce a loss value.
@@ -364,7 +366,7 @@ to be implemented.
 \item[Type of Module:] Abstract Data Type
 \end{description}
 
-\subsubsection{Evaluation Module (\mref{mE})}
+\subsubsection{Evaluation Module (\mref{mE}) (\ref{MIS-ModuleEval} in MIS)}
 \begin{description}
 \item[Secrets:] The method by which a model is evaluated. 
 \item[Services:] Compares a model's predicted bounding boxes to the ground truth bounding boxes on some evaluation set to produce an mAP metric for the model.
@@ -372,7 +374,7 @@ to be implemented.
 \item[Type of Module:] Library
 \end{description}
 
-\subsubsection{Optimization Module (\mref{mO})}
+\subsubsection{Optimization Module (\mref{mO}) (\ref{MIS-ModuleOptim} in MIS)}
 \begin{description}
 \item[Secrets:] The method by which a model's parameters are updated.
 \item[Services:] Updates a model's parameters according to the gradients stored on them using the ADAM algorithm. These gradients themselves are generated by the Loss module.
@@ -380,7 +382,7 @@ to be implemented.
 \item[Type of Module:] Abstract Data Type
 \end{description}
 
-\subsubsection{Data Processing Module (\mref{mDP})}
+\subsubsection{Data Processing Module (\mref{mDP}) (\ref{MIS-ModuleDataProc} in MIS)}
 \begin{description}
 \item[Secrets:] The method by which input data is converted into a usable format.
 \item[Services:] Converts the input images and input LiDAR into a PyTorch Tensor format that can directly be used for training.
@@ -388,7 +390,7 @@ to be implemented.
 \item[Type of Module:] Library
 \end{description}
 
-\subsubsection{Equivariant Layer Module (\mref{mEL})}
+\subsubsection{Equivariant Layer Module (\mref{mEL}) (\ref{MIS-ModuleEQ} in MIS)}
 \begin{description}
 \item[Secrets:] The format and the structure of the equivariant layers that will be used to enhance fusion object detection performance.
 \item[Services:] Creates equivariant layers that can then be put together to comprise the model. 
@@ -396,7 +398,7 @@ to be implemented.
 \item[Type of Module:] Abstract Data Type
 \end{description}
 
-\subsubsection{OpenPCDet Layer Module (\mref{mOL})}
+\subsubsection{OpenPCDet Layer Module (\mref{mOL}) (\ref{MIS-ModulePCDet} in MIS)}
 \begin{description}
 \item[Secrets:] The format and the structure of the existing OpenPCDet layers.
 \item[Services:] Creates layers that can be put together to form the base BEVFusion model and that will be used for parts of the model.
@@ -413,7 +415,7 @@ to be implemented.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Plotting Module (\mref{mPl})}
+\subsubsection{Plotting Module (\mref{mPl}) (\ref{MIS-ModulePlot} in MIS)}
 \begin{description}
 \item[Secrets:] The method by which to generate 3D visualizations of bounding box predictions
 \item[Services:] Provides methods which allow for LiDAR pointcloud scenes to be plotted in 3D alongside ground truth and predicted bounding boxes. 
@@ -421,7 +423,7 @@ to be implemented.
 \item[Type of Module:] Library
 \end{description}
 
-\subsubsection{PyTorch Module (\mref{mPy})}
+\subsubsection{PyTorch Module (\mref{mPy}) (\ref{MIS-ModuleTorch} in MIS)}
 \begin{description}
 \item[Secrets:] The set of data structures and algorithms contained within the PyTorch library
 \item[Services:] Allows for the creation of datasets, dataloaders, and models for the purposes of Deep-Learning training
@@ -429,7 +431,7 @@ to be implemented.
 \item[Type of Module:] Records, Libraries, Abstract Data Types
 \end{description}
 
-\subsubsection{Logging Module (\mref{mLg})}
+\subsubsection{Logging Module (\mref{mLg}) (\ref{MIS-ModuleLog} in MIS)}
 \begin{description}
 \item[Secrets:] The method by which to log statistics about model training and evaluation.
 \item[Services:] Logs loss during training and mAP during evaluation to a file where they can be easily visualized later.
