@@ -58,6 +58,7 @@ urlcolor=cyan          % color of external links
 Mar 21 & 1.0 & First Draft\\
 Mar 22 & 1.1 & Added units/type\\
 Apr 17 & 2.0 & Incorporated Professor Smith's feedback \\
+Apr 17 & 2.1 & Added Domain Expert feedback\\
 \bottomrule
 \end{tabularx}
 
@@ -540,7 +541,7 @@ This module interacts with the File System environmental variable, saving log fi
 \subsubsection{Access Routine Semantics}
 \noindent Model():
 \begin{itemize}
-\item transition: This function will load the model-related configuration from the Config module \ref{ModuleCfg} and will then create the OpenPCDet and Equivariant Layers accordingly. References to these layers will be stored in the pcdetLayers and eqLayers state variables. 
+\item transition: This function will load the model-related configuration from the Config module \ref{ModuleCfg} and will then create the OpenPCDet and Equivariant Layers accordingly. References to these layers will be stored in the pcdetLayers and eqLayers state variables. The exact model setup can vary based on the model configuration input by the user (\href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{example}), but the idea here is to replace non-equivariant CNNs and transformers in the base BEVFusion model with SE(2)/SE(3) equivariant versions where possible (direct one-to-one swap/replacement). Certain layers such as RELU, flattening, backprojection ones are already equivariant or cannot be replaced and thus will be imported as is from OpenPCDet's existing layers. For a high-level overview of how the base BEVFusion architecture is structured, I would suggest to check out the BEVFusion paper (\cite{liang2022bevfusion}).
 \item output: This function will return a reference to self.
 \item exception: N/A
 \end{itemize}
