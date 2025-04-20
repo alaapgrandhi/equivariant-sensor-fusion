@@ -12,6 +12,9 @@
     urlcolor=blue
 }
 \usepackage[round]{natbib}
+\usepackage{pdflscape}
+\usepackage{xr-hyper}
+\externaldocument[MIS-]{../Design/SoftDetailedDes/MIS}
 
 \input{../Comments}
 \input{../Common}
@@ -35,6 +38,7 @@
 \midrule
 February 27 & 1.0 & Initial version of the VnV Plan\\
 April 17 & 2.0 & Updated according to Professor Smith's feedback\\
+April 20 & 3.0 & Added Unit Testing \\
 \bottomrule
 \end{tabularx}
 
@@ -238,7 +242,7 @@ Additional tests may be added as the SRS document is refined.
 \subsection{Tests for Functional Requirements}
 The subsections below detail the tests that will be used to ensure that \ProjectName{}meets the functional requirements.
 
-\subsubsection{Input Format Testing}
+\subsubsection{Input Format Testing} \label{Input Format Testing}
 
 These tests will ensure that in inference, the system is able to process all the necessary
 file formats for the camera images and LiDAR pointclouds.
@@ -391,7 +395,7 @@ The test below will ensure that \ProjectName{}is being optimized correctly.
 Note that since ADAM will be directly imported from pytorch's implementation, its validity will not be verified. Rather, the code walkthroughs mentioned above in section \ref{imple_ver}
 will aid in verifying that it has been used correctly.
 
-\subsubsection{Tests for Visualization}
+\subsubsection{Tests for Visualization} \label{Tests for Visualization}
 
 The below test will verify that the visualization produced during the inference phase is correct.
 
@@ -534,129 +538,194 @@ Supervisor (Dr. Matthew Giamou) to discuss if the results seem reasonable.
 
 \section{Unit Test Description}
 
-\wss{This section should not be filled in until after the MIS (detailed design
-  document) has been completed.}
-
-\wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}  
-
-\wss{To save space and time, it may be an option to provide less detail in this section.  
-For the unit tests you can potentially layout your testing strategy here.  That is, you 
-can explain how tests will be selected for each module.  For instance, your test building 
-approach could be test cases for each access program, including one test for normal behaviour 
-and as many tests as needed for edge cases.  Rather than create the details of the input 
-and output here, you could point to the unit testing code.  For this to work, you code 
-needs to be well-documented, with meaningful names for all of the tests.}
+This section focuses on testing procedures for individual self-contained modules defined in the 
+\href{https://github.com/alaapgrandhi/equivariant-sensor-fusion/blob/main/docs/Design/SoftArchitecture/MG.pdf}{MG} and 
+\href{https://github.com/alaapgrandhi/equivariant-sensor-fusion/blob/main/docs/Design/SoftDetailedDes/MIS.pdf}{MIS} documents. 
+The idea behind the tests in this section is to verify that the modules are performing their functions as described in the module interface 
+specification. Where possible, tests will be automated through PyTest and Github Actions, but a major proportion of tests must be conducted 
+manually due to them requiring GPU compute or visual inspection of outputs.
 
 \subsection{Unit Testing Scope}
 
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
+For the purposes of these tests, several modules are not tested. The Logger \ref{MIS-ModuleLog}, Model \ref{MIS-ModuleModel}, Loss \ref{MIS-ModuleLoss}, Optimizer \ref{MIS-ModuleOptim}, and OpenPCDet Layers \ref{MIS-ModulePCDet} Modules are not tested here as they are directly inherited from OpenPCDet.
+The PyTorch module \ref{MIS-ModuleTorch} is similarly not tested as it is a well-defined and well-tested library. The plotting module \ref{MIS-ModulePlot} is not tested in this section as it is already covered by \ref{Tests for Visualization}. Similarly, the data processing module \ref{MIS-ModuleDataProc} is not tested here as it is already covered by \ref{Input Format Testing}. 
+The evaluation \ref{MIS-ModuleEval}, checkpoint \ref{MIS-ModuleCkpt}, config \ref{MIS-ModuleCfg}, and data \ref{MIS-ModuleData} modules are all evaluated together as they are mostly unchanged from OpenPCDet and can be verified through a single evaluation run. The remaining modules (training \ref{MIS-ModuleTrain}, inference \ref{MIS-ModuleInfer}, and equivariant layers \ref{MIS-ModuleEQ}) are all equally important as they directly contribute to the usefulness of the software.
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
+\subsubsection{Training Module \ref{MIS-ModuleTrain}}
 
-\subsubsection{Module 1}
-
-\wss{Include a blurb here to explain why the subsections below cover the module.
-  References to the MIS would be good.  You will want tests from a black box
-  perspective and from a white box perspective.  Explain to the reader how the
-  tests were selected.}
+Since this module's purpose is to define a procedure by which the model is trained using the 
+training dataloader, the model, the loss, and the optimizer, it is important to verify that the training loss
+actually lowers as training proceeds. This is in alignment with functional requirement R3 from the SRS. 
+Owing to the fact that this training loss is continuously logged during training, the test below is 
+sufficient for determining if the loss does indeed decrease during training.
 
 \begin{enumerate}
 
-\item{test-id1\\}
+\item{test-train\\}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+Type: Manual
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
+Initial State: N/A
 					
-\item{test-id2\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
+Input: A training run characterized by a pre-determined configuration (the exact configuration will be linked to once set in stone) will be run on the NuScenes dataset. Since the end-goal of this project is to use an equivariant network to improve fusion performance, the configuration used for this training run must contain equivariant layers (cannot simply use a pre-existing BEVFusion model).
 					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
+Output: The graph of the training loss over time should show a generally decreasing curve (spikes up between neighbouring steps are okay, but the smoothed curve should show a decreasing loss for at least 10 epochs).
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
+Test Case Derivation: If the model is effectively being trained to minimize the bounding box loss on the training set, then this value should generally decrease as the model trains more. Due to the randomness of batch-based deep-learning, it cannot be assumed that the training loss will monotically decrease without spikes up in-between.
 
-How test will be performed: 
-
-\item{...\\}
+How test will be performed: Since training is gpu-intensive, this test cannot be run automatically. Thus, a training run with the pre-determined configuration must be manually started. 
     
 \end{enumerate}
 
-\subsubsection{Module 2}
+\subsubsection{Inference Module \ref{MIS-ModuleInfer}}
 
-...
+Since this model effectively just relies on external modules to load the data and model, the key functionality that needs 
+to be verified is the way it routes data to the model and then model outputs to the plotting module. This (in addition to whether it is calling other modules correctly) 
+can be determined by the test below as it explicitly tests the full module end-to-end using the method of manufactured solutions. This aligns with functional requirement R4.
 
-\subsection{Tests for Nonfunctional Requirements}
-
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
-
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
-
-\subsubsection{Module ?}
-		
 \begin{enumerate}
 
-\item{test-id1\\}
+  \item{test-infer\\}
+  
+  Type: Automatic
+            
+  Initial State: A pre-determined multiview image and LiDAR pointcloud (these will be handpicked from their respective subfolders in NuScenes/v1.0-trainval/samples/ and put into the test's directory) will be chosen. Additionally, 
+a `model' that simply outputs a box at the center (arithmetic mean) of the LiDAR pointcloud with standard deviation height, width, and length will be chosen.  
+            
+  Input: The inference module will be called with the data and model from above. 
+            
+  Output: The visualization output by the inference pipeline here should exactly match a pre-produced plot. This pre-produced plot will be created by 
+computing the mean and standard deviations on the LiDAR pointcloud beforehand and passing the corresponding box alongside the pointcloud into the plotting module.  
+  
+  Test Case Derivation: Since this is unit testing, we can assume that the model and plotting module are working correctly here. Thus, this test will be explicitly verifying 
+that the inference module is correctly routing the data to the model and then routing the model's output to the plotting module.  
+  
+  How test will be performed: This will automatically be run through pytest with the pre-produced plot being generated beforehand and placed in the test's directory. Matplotlib.testing.compare\_images will be run to compare the generated visualization with the pre-generated plot.
+      
+  \end{enumerate}
 
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+\subsubsection{Evaluation \ref{MIS-ModuleEval}, Checkpoint \ref{MIS-ModuleCkpt}, Config \ref{MIS-ModuleCfg} and Data \ref{MIS-ModuleData} Modules}
 
-Type: Functional, Dynamic, Manual, Static etc.
+Normally, it would be more prudent to have separate unit tests for different modules. However, 
+since the evaluation, config, checkpoint, and data (for training and evaluation) modules are inherited almost entirely from the 
+base OpenPCDet repository, the tests for these can be done together. By using the pre-defined \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{BEVFusion configuration} and 
+the corresponding \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{checkpoint file} from OpenPCDet, we can check if our mAP metrics match those reported on their github.
+If so, then we know that the data (using the NuScenes eval loader), config (loading their config), checkpoint (loading their checkpoint), 
+and evaluation (using the evaluator they define) modules are working as expected. This implicitly covers requirements R3, R4, and NFR1 due to the widespread use of these modules.
+
+\begin{enumerate}
+
+\item{test-eval\\}
+
+Type: Manual
 					
-Initial State: 
+Initial State: The \href{https://github.com/open-mmlab/OpenPCDet/blob/master/tools/cfgs/nuscenes_models/bevfusion.yaml}{BEVFusion config} and \href{https://drive.google.com/file/d/1X50b-8immqlqD8VPAUkSKI0Ls-4k37g9/view}{BEVFusion checkpoint} will be loaded and ready. The NuScenes dataset will also be fully set up.
 					
-Input: 
+Input/Condition: An evaluation run will be conducted using the above config and checkpoint as input. 
 					
-Output: 
-					
-How test will be performed: 
+Output/Result: The mAP statistics should closely match those reported on the OpenPCDet repository. A little lee-way will be given due to the non-deterministic 
+nature of \href{https://pytorch.org/docs/stable/notes/numerical_accuracy.html}{PyTorch floating point computation}. 
+
+How test will be performed: Since evaluation is gpu-intensive, this test cannot be run automatically. Thus, an evaluation run must be manually started.
 
 \end{enumerate}
 
-\subsubsection{Module ?}
 
-...
+\subsection{Tests for Nonfunctional Requirements}
+
+\subsubsection{Equivariant Layers Module \ref{MIS-ModuleEQ}}
+
+I believe that testing the equivariant layers module is important for nonfunctional requirement 
+NFR1. Even though the equivariant properties of these layers do not directly factor into the mAP formula, 
+this project aims to see whether these properties can improve alignment and thus mAP for fusion-based object detection.
+Therefore, it is important to verify that the equivariant equation (if $x_{2}=gx_{1}$, $y(x_{2})=\rho(g)y(x_{1})$) does indeed hold for these layers. 
+The tests below explicitly check this by visualizing how the features extracted through these layers respond to 
+expected transformations in input.
+
+\begin{enumerate}
+
+  \item{test-feat-consistency-image\\}
+  
+  Type: Manual
+            
+  Initial State: The inference pipeline fully set up with a pretrained equivariant model set up (after training). 
+
+  Input/Condition: The model will be run on a multiview image along with several SO(2)-transformed versions of the same multiview image.
+
+  Output/Result: The image-stream features (before fusion between the image and LiDAR streams) produced by the model for the SO(2)-transformed versions should look like SO(2)-transformed versions of the features generated for the original image. If this holds, it means that input transformations do map to output transformations in a structured manner.
+
+  How test will be performed: Since finite convolutional kernel sizes can cause slight deviations from the equivariant principle, the feature maps will need to be compared visually by domain experts (myself and Dr. Matthew Giamou) to verify if the equivariance property is holding.
+
+  \item{test-feat-consistency-lidar\\}
+  
+  Type: Manual
+            
+  Initial State: The inference pipeline fully set up with a pretrained equivariant model set up (after training).
+
+  Input/Condition: The model will be run on a LiDAR pointcloud along with several SO(3)-transformed versions of the same multiview image.
+
+  Output/Result: The LiDAR-stream features (before fusion between the image and LiDAR streams) produced by the model for the SO(3)-transformed versions should look like SO(3)-transformed versions of the features generated for the original pointcloud. If this holds, it means that input transformations do map to output transformations in a structured manner.
+
+  How test will be performed: Since finite convolutional kernel sizes can cause slight deviations from the equivariant principle, the feature maps will need to be compared visually by domain experts (myself and Dr. Matthew Giamou) to verify if the equivariance property is holding.
+
+  \item{test-transform-mapping-image\\}
+  
+  Type: Automatic
+            
+  Initial State: The inference pipeline fully set up with a pretrained equivariant model set up (after training).
+
+  Input/Condition: The model will be run on a multiview image along with several SO(2)-transformed versions of the same multiview image.
+
+  Output/Result: Since the layers in this case are determined by choosing an explicit mapping between input and output transformations, a set of mathematical equations can be solved to determine the inverse output transformation for any input transformation. Thus, applying the inverse output transformation to the features from the SO(2)-transformed multi-view images should produce feature maps that are nearly identical to the feature map of the untransformed multi-view image.
+
+  How test will be performed: This test will automatically be run through pytest with the inverse output transformation being calculated beforehand. The untransformed multi-view image features will be compared to the inverse transformed features from the SO(2)-transformed multi-view images using Matplotlib.testing.compare\_images. An empirically determined similarity threshold will be used (10 average pixel difference to start with).
+  
+  \item{test-transform-mapping-lidar\\}
+  
+  Type: Automatic
+            
+  Initial State: The inference pipeline fully set up with a pretrained equivariant model set up (after training).
+
+  Input/Condition: The model will be run on LiDAR pointcloud along with several SO(3)-transformed versions of the same pointcloud.
+
+  Output/Result: Much like with the previous test, we should be able to derive a structured inverse output transformation for any input transformation. Then, applying this inverse to the features from the SO(3)-transformed pointclouds should produce feature maps that are nearly identical to the feature map of the untransformed pointcloud.
+
+  How test will be performed: This test will automatically be run through pytest with the inverse output transformation being calculated before-hand. The untransformed features will be compared to the inverse transformed features using the formula $Err=\frac{||Feat_{un}-Feat_{inv}||}{||Feat_{un}||}$. From here, an acceptable error threshold will be empirically determined (5\% to start).
+
+\end{enumerate}
+  
 
 \subsection{Traceability Between Test Cases and Modules}
 
-\wss{Provide evidence that all of the modules have been considered.}
-				
+\newpage
+\begin{landscape}
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+  \hline
+    & \ref{MIS-ModuleTrain} & \ref{MIS-ModuleInfer} & \ref{MIS-ModuleEval} & \ref{MIS-ModuleLog} & \ref{MIS-ModuleModel} & \ref{MIS-ModuleLoss} & \ref{MIS-ModuleOptim} & \ref{MIS-ModulePlot} & \ref{MIS-ModuleCkpt} & \ref{MIS-ModuleData} & \ref{MIS-ModuleEQ} & \ref{MIS-ModulePCDet} & \ref{MIS-ModuleTorch} & \ref{MIS-ModuleCfg} & \ref{MIS-ModuleDataProc} \\
+  \hline
+  Camera Image Input Testing             & & & & & & & & & & & & & & &X\\ \hline
+  LiDAR Pointcloud Input Testing         & & & & & & & & & & & & & & &X\\ \hline
+  Model Training Consistency Testing     &X& &X&X&X&X&X& &X&X&X&X& & & \\ \hline
+  Visualization Testing                  & & & & & & & &X& & & & & & & \\ \hline
+  Accuracy Testing                       &X& &X&X&X&X&X& &X&X&X&X& & & \\ \hline
+  Understandability Testing              & & & & & & & & & & & & & & & \\ \hline
+  Installability Testing                 & & & & & & & & & & & & & & & \\ \hline
+  Performance Testing                    & & & & & & & & & & & & & & & \\ \hline
+  Training Module Testing                &X& & & & & & & & & & & & & & \\ \hline
+  Inference Module Testing               & &X& & & & & & & & & & & & & \\ \hline
+  Eval, Ckpt, Cfg, Data Module Testing   & & &X& & & & & &X&X& & & &X& \\ \hline
+  Equivariant Layers Module Testing      & & & & & & & & & & &X& & & & \\ \hline
+  \hline
+  \end{tabular}
+  \caption{Traceability Matrix Showing the Connections Between Requirements and Tests}
+  \label{Table:R_trace}
+  \end{table}
+\end{landscape}
+
 \bibliographystyle{plainnat}
 
 \bibliography{../../refs/References}
@@ -674,6 +743,6 @@ Their values are defined in this section for easy maintenance.
 
 \subsection{Usability Survey Questions?}
 
-\wss{This is a section that would be appropriate for some projects.}
+N/A
 
 \end{document}
